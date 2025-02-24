@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
+	<Authors>Serhiy Lakas</Authors>
+	<Copyright>2022, Serhiy Lakas</Copyright>
+	<Product>Exchange HttpClient Extension</Product>
+	<Description>Exchange HttpClient Extension</Description>
+	<Company>sabatex on git</Company>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageId>Sabatex.ObjectsExchange.HttpClientConnector</PackageId>
+	<PackageTags>#SabatexExchange </PackageTags>
+	<Version>9.0.0-betta1</Version>
+
   </PropertyGroup>
 
   <ItemGroup>
