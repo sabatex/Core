@@ -25,50 +25,36 @@ using System.Text.Unicode;
 
 namespace WebApiDocumentEx.Test;
 
-public class v2Test :  IClassFixture<WebApplicationFactory<Program>>
+public class v1Test :  IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly ITestOutputHelper _output;
     private readonly WebApplicationFactory<Program> _factory;
-    const string apiRoute = "api/v2";
+     
+    const string  apiRoute = "api/v1";
 
 
-
-    public v2Test(WebApplicationFactory<Program> factory, ITestOutputHelper output)
+    public v1Test(WebApplicationFactory<Program> factory, ITestOutputHelper output)
     {
         _output = output;
         _factory = factory;
     }
 
-
     [Fact]
     public async Task Login()
     {
-        // fake login id
-        var client1 = _factory.CreateClient();
-        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = new Guid(), password = TestData.Client1.Password });
-        Assert.NotNull(responce);
-        Assert.False(responce.IsSuccessStatusCode);
-
-        // fake password
-        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = "123456789" });
-        Assert.NotNull(responce);
-        Assert.False(responce.IsSuccessStatusCode);
-
         // login client 1
-        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = TestData.Client1.Password });
+        var client1 = _factory.CreateClient();
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = TestData.Client1.Password });
         Assert.NotNull(responce);
         Assert.True(responce.IsSuccessStatusCode);
         var token = await responce.Content.ReadFromJsonAsync<Token>();
         Assert.NotNull(token);
     }
 
-    [Fact]
-    public async Task RefreshTokenAsync()
-    {
-        var client1 = _factory.CreateClient();
-        // fake refresh token
-        var responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { });
-    }
+
+
+
+ 
 
 
     //[Fact]

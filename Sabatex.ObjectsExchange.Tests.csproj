@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net9.0</TargetFrameworks>
+	  <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <GenerateInternalsVisibleToAttribute>true</GenerateInternalsVisibleToAttribute>
@@ -9,7 +10,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -20,17 +20,19 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
-    <PackageReference Include="Microsoft.Extensions.Localization"/>
-    <PackageReference Include="Sabatex.Core"/>
-    <PackageReference Include="Sabatex.RadzenBlazor"/>
+    <PackageReference Include="Microsoft.Extensions.Localization" />
+    <PackageReference Include="Sabatex.Core" />
+    <PackageReference Include="Sabatex.RadzenBlazor" />
+    <PackageReference Include="xunit.v3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ObjectsExchange\ObjectsExchange.csproj" />
-    <ProjectReference Include="..\Sabatex.ObjectsExchange.HttpClientConnector\Sabatex.ObjectsExchange.HttpClientConnector.csproj" />
+    <ProjectReference Include="..\Sabatex.ObjectExchange.ClientDataAdapter.Memory\Sabatex.ObjectExchange.ClientDataAdapter.Memory.csproj" />
+    <ProjectReference Include="..\Sabatex.ObjectsExchange.ApiAdapter\Sabatex.ObjectsExchange.ApiAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>"ObjectsExchange"</_Parameter1>
-    </AssemblyAttribute>
+	</AssemblyAttribute>
   </ItemGroup>
 </Project>

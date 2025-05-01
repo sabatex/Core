@@ -9,24 +9,41 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using ObjectsExchange;
 using Xunit;
+using Sabatex.ObjectsExchange.Tests;
+using Sabatex.ObjectsExchange.Models;
 
 
 namespace WebApiDocumentEx.Test;
-[TestCaseOrderer("WebApiDocumentEx.Test.PriorityOrderer", "WebApiDocumentEx.Test")]
 public class v0Test : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _senderClient;
-    private readonly HttpClient _receiverClient;
-
-    private const string senderNodeName = "sendertest";
-    private const string destinationNodeName = "destinationtest";
+    const string apiRoute = "api/v1";
 
     public v0Test(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _senderClient = _factory.CreateClient();
-        _receiverClient = _factory.CreateClient();
+     }
+
+    [Fact]
+    public async Task Login()
+    {
+        // login client 1
+        var client1 = _factory.CreateClient();
+        Assert.NotNull(client1);
+        // bad fake all
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = "fake", password = "fake" });
+        Assert.NotNull(responce);
+        Assert.False(responce.IsSuccessStatusCode);
+        // bad fake password
+        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = "fake" });
+        Assert.NotNull(responce);
+        Assert.False(responce.IsSuccessStatusCode);
+    
+        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = TestData.Client1.Password });
+        Assert.NotNull(responce);
+        Assert.True(responce.IsSuccessStatusCode);
+        var token = await responce.Content.ReadFromJsonAsync<Token>();
+        Assert.NotNull(token);
     }
 
 
@@ -71,7 +88,7 @@ public class v0Test : IClassFixture<WebApplicationFactory<Program>>
     //        var objects = await client.ApiGetObjectExchangeAsync(destination,take);
     //        if (objects.Count() == 0)
     //            return result;
- 
+
     //        result = result + objects.Count();
     //        foreach (var obj in objects)
     //        {
@@ -84,7 +101,7 @@ public class v0Test : IClassFixture<WebApplicationFactory<Program>>
     //    return result;
     //}
 
-    
+
     //[Fact, Priority(1)]
     //public async void TestLogin()
     //{
@@ -108,7 +125,7 @@ public class v0Test : IClassFixture<WebApplicationFactory<Program>>
     //     // send 100 objects
     //    var postObjects = await SendObjectsAsync(senderHTTPClient,destinationNodeName,100);
     //    Assert.Equal(100, postObjects.Count());
-       
+
     //    // get 100 objects
     //    var getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 100);
     //    Assert.Equal(100, getObjects.Count());
@@ -118,7 +135,7 @@ public class v0Test : IClassFixture<WebApplicationFactory<Program>>
     //    {
     //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
     //    }
-        
+
     //    getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 1000);
     //    foreach (var obj in getObjects)
     //    {
@@ -144,7 +161,7 @@ public class v0Test : IClassFixture<WebApplicationFactory<Program>>
     //    {
     //        await senderHTTPClient.ApiPostQueryAsync(destinationNodeName, "TestObjectType", Random.Shared.Next(0, 10).ToString());
     //    }
- 
+
     //    var queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
     //    Assert.Equal(10,queries.Count());
 
@@ -152,9 +169,9 @@ public class v0Test : IClassFixture<WebApplicationFactory<Program>>
     //    {
     //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
     //    }
-        
+
     //    queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
-       
+
 
     //    foreach (var query in queries)
     //    {
