@@ -12,9 +12,12 @@
     <PackageId>Sabatex.ObjectsExchange.ApiAdapter</PackageId>
     <PackageTags>#SabatexExchange </PackageTags>
     <Version>9.0.0-betta1</Version>
+	<AssemblyName>Sabatex.ObjectsExchange.ApiAdapter</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" />
-    <PackageReference Include="Sabatex.ObjectsExchange.Models" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sabatex.ObjectsExchange.Models\Sabatex.ObjectsExchange.Models.csproj" />
   </ItemGroup>
 </Project>
