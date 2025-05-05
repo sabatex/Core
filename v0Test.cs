@@ -11,39 +11,72 @@ using ObjectsExchange;
 using Xunit;
 using Sabatex.ObjectsExchange.Tests;
 using Sabatex.ObjectsExchange.Models;
+using System.Net;
 
 
 namespace WebApiDocumentEx.Test;
-public class v0Test : IClassFixture<WebApplicationFactory<Program>>
+[Collection("MyTestCollection")]
+public class v0Test 
 {
     private readonly WebApplicationFactory<Program> _factory;
     const string apiRoute = "api/v1";
 
-    public v0Test(WebApplicationFactory<Program> factory)
+    public v0Test(CustomWebApplicationFactory<Program> factory)
     {
+        //_factory = TestFixture.Instance;
         _factory = factory;
-     }
+    }
 
-    [Fact]
-    public async Task Login()
+    [Theory]
+    [InlineData("FakeId","FakePassword",false,TestDisplayName ="Fakeall")]
+    [InlineData(TestData.Client1Id, "FakePassword", false, TestDisplayName = "FakePassword")]
+    [InlineData(TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "ValidData")]
+    public async Task Login(string clientId,string password,bool success)
     {
         // login client 1
         var client1 = _factory.CreateClient();
         Assert.NotNull(client1);
         // bad fake all
-        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = "fake", password = "fake" });
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = clientId, password = password });
         Assert.NotNull(responce);
-        Assert.False(responce.IsSuccessStatusCode);
-        // bad fake password
-        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = "fake" });
-        Assert.NotNull(responce);
-        Assert.False(responce.IsSuccessStatusCode);
+        if (success)
+        {
+            Assert.True(responce.IsSuccessStatusCode);
+        }
+        else
+        {
+            Assert.False(responce.IsSuccessStatusCode);
+        }
+     }
     
-        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = TestData.Client1.Password });
+    [Theory]
+    [InlineData("FakeToken", false, "", "", false, TestDisplayName = "Fake token")]
+    [InlineData("FakeToken", true, TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "Fake token, login and refresh token")]
+    public async Task RefreshTokenAsync(string refrtesh_token, bool useLogin, string clientId, string password, bool success)
+    {
+        var client1 = _factory.CreateClient();
+        Assert.NotNull(client1);
+        // fake refresh token
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { password = refrtesh_token });
         Assert.NotNull(responce);
-        Assert.True(responce.IsSuccessStatusCode);
-        var token = await responce.Content.ReadFromJsonAsync<Token>();
-        Assert.NotNull(token);
+        Assert.Equal(responce.StatusCode, HttpStatusCode.Unauthorized);
+        if (useLogin)
+        {
+            responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = clientId, password = password });
+            Assert.NotNull(responce);
+            Assert.True(responce.IsSuccessStatusCode);
+            var token = await responce.Content.ReadFromJsonAsync<Token>();
+            Assert.NotNull(token);
+            Assert.NotNull(token.RefreshToken);
+            Assert.NotNull(token.AccessToken);
+            responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { password = token.RefreshToken });
+            Assert.NotNull(responce);
+            Assert.True(responce.IsSuccessStatusCode);
+            token = await responce.Content.ReadFromJsonAsync<Token>();
+            Assert.NotNull(token);
+            Assert.NotNull(token.RefreshToken);
+            Assert.NotNull(token.AccessToken);
+        }
     }
 
 

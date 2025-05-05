@@ -22,10 +22,11 @@ using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using System.Net;
 
 namespace WebApiDocumentEx.Test;
-
-public class v1Test :  IClassFixture<WebApplicationFactory<Program>>
+[Collection("MyTestCollection")]
+public class v1Test 
 {
     private readonly ITestOutputHelper _output;
     private readonly WebApplicationFactory<Program> _factory;
@@ -33,28 +34,68 @@ public class v1Test :  IClassFixture<WebApplicationFactory<Program>>
     const string  apiRoute = "api/v1";
 
 
-    public v1Test(WebApplicationFactory<Program> factory, ITestOutputHelper output)
+    public v1Test(CustomWebApplicationFactory<Program> factory, ITestOutputHelper output)
     {
         _output = output;
         _factory = factory;
     }
 
-    [Fact]
-    public async Task Login()
+    [Theory]
+    [InlineData("FakeId", "FakePassword", false, TestDisplayName = "Fakeall")]
+    [InlineData(TestData.Client1Id, "FakePassword", false, TestDisplayName = "FakePassword")]
+    [InlineData(TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "ValidData")]
+    public async Task Login(string clientId, string password, bool success)
     {
         // login client 1
         var client1 = _factory.CreateClient();
-        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = TestData.Client1.Password });
+        Assert.NotNull(client1);
+        // bad fake all
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = clientId, password = password });
         Assert.NotNull(responce);
-        Assert.True(responce.IsSuccessStatusCode);
-        var token = await responce.Content.ReadFromJsonAsync<Token>();
-        Assert.NotNull(token);
+        if (success)
+        {
+            Assert.True(responce.IsSuccessStatusCode);
+        }
+        else
+        {
+            Assert.False(responce.IsSuccessStatusCode);
+        }
+    }
+
+
+    [Theory]
+    [InlineData("FakeToken", false, "", "", false, TestDisplayName = "Fake token")]
+    [InlineData("FakeToken", true, TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "Fake token, login and refresh token")]
+    public async Task RefreshTokenAsync(string refrtesh_token, bool useLogin, string clientId, string password, bool success)
+    {
+        var client1 = _factory.CreateClient();
+        Assert.NotNull(client1);
+        // fake refresh token
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { password = refrtesh_token });
+        Assert.NotNull(responce);
+        Assert.Equal(responce.StatusCode, HttpStatusCode.Unauthorized);
+        if (useLogin)
+        {
+            responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = clientId, password = password });
+            Assert.NotNull(responce);
+            Assert.True(responce.IsSuccessStatusCode);
+            var token = await responce.Content.ReadFromJsonAsync<Token>();
+            Assert.NotNull(token);
+            Assert.NotNull(token.RefreshToken);
+            Assert.NotNull(token.AccessToken);
+            responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { password = token.RefreshToken });
+            Assert.NotNull(responce);
+            Assert.True(responce.IsSuccessStatusCode);
+            token = await responce.Content.ReadFromJsonAsync<Token>();
+            Assert.NotNull(token);
+            Assert.NotNull(token.RefreshToken);
+            Assert.NotNull(token.AccessToken);
+        }
     }
 
 
 
 
- 
 
 
     //[Fact]
@@ -63,20 +104,20 @@ public class v1Test :  IClassFixture<WebApplicationFactory<Program>>
     //    var stopwatch = Stopwatch.StartNew();
     //    await RegisterUploadDataAsync();
     //    _output.WriteLine($"RegisterUploadData 100 Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
     //    stopwatch.Restart();
     //    Assert.True(await _exchangeApiAdapter.RefreshTokenAsync()); 
     //    _output.WriteLine($"First RefreshToken Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
     //    stopwatch.Restart();
     //    Assert.True(await _exchangeApiAdapter.RefreshTokenAsync());
     //    _output.WriteLine($"Last RefreshToken Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
     //    stopwatch.Restart();
     //    var uploads = await _exchangeApiAdapter.GetUploadObjectsAsync(_destination1ExchangeApiAdapter.ClientId, 100);
     //    Assert.Equal(100, uploads.Count());
     //    _output.WriteLine($"GetUploadObjectsAsync(100) Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
     //    stopwatch.Restart();
     //    foreach (var upload in uploads)
     //    {
@@ -90,7 +131,7 @@ public class v1Test :  IClassFixture<WebApplicationFactory<Program>>
     //    stopwatch.Restart();
     //    Assert.True(await _destination1ExchangeApiAdapter.RefreshTokenAsync());
     //    _output.WriteLine($"refresh destination token Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
     //    stopwatch.Restart();
     //    var objects = await _destination1ExchangeApiAdapter.GetObjectsAsync(_exchangeApiAdapter.ClientId, 50);
     //    Assert.Equal(50, objects.Count());
@@ -113,80 +154,80 @@ public class v1Test :  IClassFixture<WebApplicationFactory<Program>>
     //}
 
 
- 
-
-        //    var destinationHTTPClient = _factory.CreateClient();
-        //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
-        //}
 
 
-        //[Fact,Priority(2)]
-        //public async void TestObjectExchange()
-        //{
-        //    // логінимось на сервері
-        //    var senderHTTPClient = _factory.CreateClient();
-        //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
-        //    var destinationHTTPClient = _factory.CreateClient();
-        //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
-
-        //     // send 100 objects
-        //    var postObjects = await SendObjectsAsync(senderHTTPClient,destinationNodeName,100);
-        //    Assert.Equal(100, postObjects.Count());
-
-        //    // get 100 objects
-        //    var getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 100);
-        //    Assert.Equal(100, getObjects.Count());
-
-        //    // delete 100 objects
-        //    foreach (var obj in getObjects)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
-        //    }
-
-        //    getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 1000);
-        //    foreach (var obj in getObjects)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
-        //    }
-
-        //    Assert.True(getObjects.Count()==0);
+    //    var destinationHTTPClient = _factory.CreateClient();
+    //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
+    //}
 
 
+    //[Fact,Priority(2)]
+    //public async void TestObjectExchange()
+    //{
+    //    // логінимось на сервері
+    //    var senderHTTPClient = _factory.CreateClient();
+    //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
+    //    var destinationHTTPClient = _factory.CreateClient();
+    //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
 
-        //}
+    //     // send 100 objects
+    //    var postObjects = await SendObjectsAsync(senderHTTPClient,destinationNodeName,100);
+    //    Assert.Equal(100, postObjects.Count());
 
-        //[Fact, Priority(3)]
-        //public async void TestQueryExchange()
-        //{
-        //    // логінимось на сервері
-        //    var senderHTTPClient = _factory.CreateClient();
-        //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
-        //    var destinationHTTPClient = _factory.CreateClient();
-        //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
+    //    // get 100 objects
+    //    var getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 100);
+    //    Assert.Equal(100, getObjects.Count());
 
-        //    for (int i = 0; i < 100; i++)
-        //    {
-        //        await senderHTTPClient.ApiPostQueryAsync(destinationNodeName, "TestObjectType", Random.Shared.Next(0, 10).ToString());
-        //    }
+    //    // delete 100 objects
+    //    foreach (var obj in getObjects)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
+    //    }
 
-        //    var queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
-        //    Assert.Equal(10,queries.Count());
+    //    getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 1000);
+    //    foreach (var obj in getObjects)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
+    //    }
 
-        //    foreach (var query in queries)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
-        //    }
-
-        //    queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
-
-
-        //    foreach (var query in queries)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
-        //    }
-        //    Assert.True(queries.Count()==0);
-        //}
+    //    Assert.True(getObjects.Count()==0);
 
 
 
-    }
+    //}
+
+    //[Fact, Priority(3)]
+    //public async void TestQueryExchange()
+    //{
+    //    // логінимось на сервері
+    //    var senderHTTPClient = _factory.CreateClient();
+    //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
+    //    var destinationHTTPClient = _factory.CreateClient();
+    //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
+
+    //    for (int i = 0; i < 100; i++)
+    //    {
+    //        await senderHTTPClient.ApiPostQueryAsync(destinationNodeName, "TestObjectType", Random.Shared.Next(0, 10).ToString());
+    //    }
+
+    //    var queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
+    //    Assert.Equal(10,queries.Count());
+
+    //    foreach (var query in queries)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
+    //    }
+
+    //    queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
+
+
+    //    foreach (var query in queries)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
+    //    }
+    //    Assert.True(queries.Count()==0);
+    //}
+
+
+
+}

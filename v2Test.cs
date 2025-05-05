@@ -22,10 +22,13 @@ using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Identity;
+using Sabatex.ObjectsExchange.Controllers;
+using System.Net;
 
 namespace WebApiDocumentEx.Test;
-
-public class v2Test :  IClassFixture<WebApplicationFactory<Program>>
+[Collection("MyTestCollection")]
+public class v2Test 
 {
     private readonly ITestOutputHelper _output;
     private readonly WebApplicationFactory<Program> _factory;
@@ -33,41 +36,64 @@ public class v2Test :  IClassFixture<WebApplicationFactory<Program>>
 
 
 
-    public v2Test(WebApplicationFactory<Program> factory, ITestOutputHelper output)
+    public v2Test(CustomWebApplicationFactory<Program> factory, ITestOutputHelper output)
     {
         _output = output;
         _factory = factory;
     }
 
 
-    [Fact]
-    public async Task Login()
+    [Theory]
+    [InlineData("FakeId", "FakePassword", false, TestDisplayName = "Fakeall")]
+    [InlineData(TestData.Client1Id, "FakePassword", false, TestDisplayName = "FakePassword")]
+    [InlineData(TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "ValidData")]
+    public async Task Login(string clientId, string password, bool success)
     {
-        // fake login id
-        var client1 = _factory.CreateClient();
-        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = new Guid(), password = TestData.Client1.Password });
-        Assert.NotNull(responce);
-        Assert.False(responce.IsSuccessStatusCode);
-
-        // fake password
-        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = "123456789" });
-        Assert.NotNull(responce);
-        Assert.False(responce.IsSuccessStatusCode);
-
         // login client 1
-        responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.Client1.ClientId, password = TestData.Client1.Password });
+        var client1 = _factory.CreateClient();
+        Assert.NotNull(client1);
+        // bad fake all
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = clientId, password = password });
         Assert.NotNull(responce);
-        Assert.True(responce.IsSuccessStatusCode);
-        var token = await responce.Content.ReadFromJsonAsync<Token>();
-        Assert.NotNull(token);
+        if (success)
+        {
+            Assert.True(responce.IsSuccessStatusCode);
+        }
+        else
+        {
+            Assert.False(responce.IsSuccessStatusCode);
+        }
     }
 
-    [Fact]
-    public async Task RefreshTokenAsync()
+
+    [Theory]
+    [InlineData("FakeToken", false,"","", false, TestDisplayName = "Fake token")]
+    [InlineData("FakeToken", true, TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "Fake token, login and refresh token")]
+    public async Task RefreshTokenAsync(string refrtesh_token, bool useLogin,string clientId,string password, bool success)
     {
         var client1 = _factory.CreateClient();
+        Assert.NotNull(client1);
         // fake refresh token
-        var responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { });
+        var responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { refresh_token=refrtesh_token });
+        Assert.NotNull(responce);
+        Assert.Equal(responce.StatusCode,HttpStatusCode.Unauthorized);
+        if (useLogin)
+        {
+            responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = clientId, password = password });
+            Assert.NotNull(responce);
+            Assert.True(responce.IsSuccessStatusCode);
+            var token = await responce.Content.ReadFromJsonAsync<Token>();
+            Assert.NotNull(token);
+            Assert.NotNull(token.RefreshToken);
+            Assert.NotNull(token.AccessToken);
+            responce = await client1.PostAsJsonAsync($"{apiRoute}/refresh_token", new { refresh_token = token.RefreshToken });
+            Assert.NotNull(responce);
+            Assert.True(responce.IsSuccessStatusCode);
+            token = await responce.Content.ReadFromJsonAsync<Token>();
+            Assert.NotNull(token);
+            Assert.NotNull(token.RefreshToken);
+            Assert.NotNull(token.AccessToken);
+        }
     }
 
 

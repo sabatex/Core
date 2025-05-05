@@ -25,7 +25,8 @@ using System.Text.Unicode;
 
 namespace WebApiDocumentEx.Test;
 
-public class ApiAdapterTest :  IClassFixture<WebApplicationFactory<Program>>
+[Collection("MyTestCollection")]
+public class ApiAdapterTest
 {
     private readonly ITestOutputHelper _output;
     private readonly WebApplicationFactory<Program> _factory;
@@ -35,7 +36,7 @@ public class ApiAdapterTest :  IClassFixture<WebApplicationFactory<Program>>
     
 
 
-    public ApiAdapterTest(WebApplicationFactory<Program> factory, ITestOutputHelper output)
+    public ApiAdapterTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper output)
     {
         _output = output;
         _factory = factory;
