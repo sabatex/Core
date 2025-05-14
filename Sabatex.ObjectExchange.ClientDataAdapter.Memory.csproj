@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sabatex.ObjectsExchange.ApiAdapter\Sabatex.ObjectsExchange.ApiAdapter.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sabatex.ObjectExchange.ClientDataAdapter\Sabatex.ObjectExchange.ClientDataAdapter.csproj" />
+    <ProjectReference Include="..\Sabatex.ObjectExchange.Core\Sabatex.ObjectExchange.Core.csproj" />
   </ItemGroup>
 
 </Project>
