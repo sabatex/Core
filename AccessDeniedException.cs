@@ -1,4 +1,5 @@
-﻿using Sabatex.ObjectsExchange.Models;
+﻿using Sabatex.ObjectExchange.Core;
+using Sabatex.ObjectsExchange.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
