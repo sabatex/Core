@@ -9,11 +9,18 @@ using Xunit;
 namespace Sabatex.ObjectsExchange.Tests
 {
     [CollectionDefinition("MyTestCollection")]
-    public class MyTestCollection : ICollectionFixture<CustomWebApplicationFactory<Program>>
+
+    public class MyTestCollection : ICollectionFixture<CustomWebApplicationFactory>
     {
-        // This class has no code, and is never created. Its purpose is simply
-        // to be the place to apply [CollectionDefinition] and all the
-        // ICollectionFixture<> interfaces.
+
+
+    }
+    [CollectionDefinition("IntegrationTestCollection")]
+
+    public class IntegrationTestCollection : ICollectionFixture<IntegrationFactory>
+    {
+
+
     }
 
 }

@@ -23,38 +23,25 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 
-namespace WebApiDocumentEx.Test;
+namespace Sabatex.ObjectsExchange.Tests;
 
 [Collection("MyTestCollection")]
+//[TestCaseOrderer(typeof(PriorityOrderer))]
 public class ApiAdapterTest
 {
     private readonly ITestOutputHelper _output;
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
     private readonly IExchangeApiAdapter _exchangeApiAdapter;
     private readonly IExchangeApiAdapter _destination1ExchangeApiAdapter;
     private readonly HttpClient _httpClient;
-    
 
 
-    public ApiAdapterTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper output)
+
+    public ApiAdapterTest(CustomWebApplicationFactory factory, ITestOutputHelper output)
     {
         _output = output;
         _factory = factory;
         _httpClient = factory.CreateClient();
-        var option = new SabatexExchangeOptions()
-        {
-            ApiUrl = _httpClient.BaseAddress.ToString(),
-            ClientId = Guid.Parse("161bab4f-02de-4616-b3dd-826ec8288026"),
-            ClientSecret = "DemoPassword"
-        };
-        _exchangeApiAdapter = new ExchangeApiAdapterV2(new Options<SabatexExchangeOptions>(option), new Sabatex.ObjectExchange.ClientDataAdapter.Memory.DataStorage(), factory.CreateClient());
-        option = new SabatexExchangeOptions()
-        {
-            ApiUrl = _httpClient.BaseAddress.ToString(),
-            ClientId = Guid.Parse("6e5ebe6b-120b-4d6c-8ee1-6ea0260ffc91"),
-            ClientSecret = "DemoPassword"
-        };
-        _destination1ExchangeApiAdapter = new ExchangeApiAdapterV2(new Options<SabatexExchangeOptions>(option), new Sabatex.ObjectExchange.ClientDataAdapter.Memory.DataStorage(), factory.CreateClient());
     }
 
     private async Task RegisterUploadDataAsync()
@@ -67,9 +54,9 @@ public class ApiAdapterTest
         for (int i = 0; i < 100; i++)
         {
             var id = Guid.NewGuid();
-            var messageHeader = System.Text.Json.JsonSerializer.Serialize(new { Id = id, Type = "Довідник.Номенклатура" },options1);
-            var message = System.Text.Json.JsonSerializer.Serialize(new { Id = id, Name = $"Номенклатура {i}", Description = $"Опис номенклатури {i}" },options1);
-            await _exchangeApiAdapter.RegisterMessageAsync(_destination1ExchangeApiAdapter.ClientId, messageHeader, message);
+            var messageHeader = System.Text.Json.JsonSerializer.Serialize(new { Id = id, Type = "Довідник.Номенклатура" }, options1);
+            var message = System.Text.Json.JsonSerializer.Serialize(new { Id = id, Name = $"Номенклатура {i}", Description = $"Опис номенклатури {i}" }, options1);
+            await _factory.NodeA.DataAdapter.RegisterUploadMessageAsync(_destination1ExchangeApiAdapter.ClientId, messageHeader, message);
         }
     }
 
@@ -81,42 +68,42 @@ public class ApiAdapterTest
         var stopwatch = Stopwatch.StartNew();
         await RegisterUploadDataAsync();
         _output.WriteLine($"RegisterUploadData 100 Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
         stopwatch.Restart();
-        Assert.True(await _exchangeApiAdapter.RefreshTokenAsync()); 
+        Assert.True(await _exchangeApiAdapter.RefreshTokenAsync());
         _output.WriteLine($"First RefreshToken Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
         stopwatch.Restart();
         Assert.True(await _exchangeApiAdapter.RefreshTokenAsync());
         _output.WriteLine($"Last RefreshToken Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
         stopwatch.Restart();
-        var uploads = await _exchangeApiAdapter.GetUploadObjectsAsync(_destination1ExchangeApiAdapter.ClientId, 100);
+        var uploads = await _factory.NodeA.DataAdapter.GetUploadMessagesAsync(_destination1ExchangeApiAdapter.ClientId, 10);
         Assert.Equal(100, uploads.Count());
         _output.WriteLine($"GetUploadObjectsAsync(100) Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
         stopwatch.Restart();
         foreach (var upload in uploads)
         {
-            await _exchangeApiAdapter.PostObjectAsync(_destination1ExchangeApiAdapter.ClientId, upload.MessageHeader, upload.Message,upload.DateStamp);
-            await _exchangeApiAdapter.RemoveUploadMessageAsync(_destination1ExchangeApiAdapter.ClientId,upload.Id);
+            await _exchangeApiAdapter.PostObjectAsync(_destination1ExchangeApiAdapter.ClientId, upload.MessageHeader, upload.Message, upload.DateStamp);
+            await _factory.NodeA.DataAdapter.RemoveUploadMessageAsync(_destination1ExchangeApiAdapter.ClientId, upload.Id);
         }
-        uploads = await _exchangeApiAdapter.GetUploadObjectsAsync(_destination1ExchangeApiAdapter.ClientId, 100);
+        uploads = await _factory.NodeA.DataAdapter.GetUploadMessagesAsync(_destination1ExchangeApiAdapter.ClientId, 10);
         Assert.Equal(0, uploads.Count());
         _output.WriteLine($"Upload and delete 100 objects Execution Time: {stopwatch.ElapsedMilliseconds} ms");
 
         stopwatch.Restart();
         Assert.True(await _destination1ExchangeApiAdapter.RefreshTokenAsync());
         _output.WriteLine($"refresh destination token Execution Time: {stopwatch.ElapsedMilliseconds} ms");
-        
+
         stopwatch.Restart();
-        var objects = await _destination1ExchangeApiAdapter.GetObjectsAsync(_exchangeApiAdapter.ClientId, 50);
+        var objects = await _destination1ExchangeApiAdapter.GetObjectsAsync(_exchangeApiAdapter.ClientId, 5);
         Assert.Equal(50, objects.Count());
         await _destination1ExchangeApiAdapter.DeleteRange(objects.Select(s => s.Id).ToArray());
         _output.WriteLine($"Download from Api and delete_range 50 objects Execution Time: {stopwatch.ElapsedMilliseconds} ms");
 
         stopwatch.Restart();
-        objects = await _destination1ExchangeApiAdapter.GetObjectsAsync(_exchangeApiAdapter.ClientId, 50);
+        objects = await _destination1ExchangeApiAdapter.GetObjectsAsync(_exchangeApiAdapter.ClientId, 5);
         Assert.Equal(50, objects.Count());
 
         foreach (var obj in objects)
@@ -131,80 +118,80 @@ public class ApiAdapterTest
     }
 
 
- 
-
-        //    var destinationHTTPClient = _factory.CreateClient();
-        //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
-        //}
 
 
-        //[Fact,Priority(2)]
-        //public async void TestObjectExchange()
-        //{
-        //    // логінимось на сервері
-        //    var senderHTTPClient = _factory.CreateClient();
-        //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
-        //    var destinationHTTPClient = _factory.CreateClient();
-        //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
-
-        //     // send 100 objects
-        //    var postObjects = await SendObjectsAsync(senderHTTPClient,destinationNodeName,100);
-        //    Assert.Equal(100, postObjects.Count());
-
-        //    // get 100 objects
-        //    var getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 100);
-        //    Assert.Equal(100, getObjects.Count());
-
-        //    // delete 100 objects
-        //    foreach (var obj in getObjects)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
-        //    }
-
-        //    getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 1000);
-        //    foreach (var obj in getObjects)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
-        //    }
-
-        //    Assert.True(getObjects.Count()==0);
+    //    var destinationHTTPClient = _factory.CreateClient();
+    //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
+    //}
 
 
+    //[Fact,Priority(2)]
+    //public async void TestObjectExchange()
+    //{
+    //    // логінимось на сервері
+    //    var senderHTTPClient = _factory.CreateClient();
+    //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
+    //    var destinationHTTPClient = _factory.CreateClient();
+    //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
 
-        //}
+    //     // send 100 objects
+    //    var postObjects = await SendObjectsAsync(senderHTTPClient,destinationNodeName,100);
+    //    Assert.Equal(100, postObjects.Count());
 
-        //[Fact, Priority(3)]
-        //public async void TestQueryExchange()
-        //{
-        //    // логінимось на сервері
-        //    var senderHTTPClient = _factory.CreateClient();
-        //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
-        //    var destinationHTTPClient = _factory.CreateClient();
-        //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
+    //    // get 100 objects
+    //    var getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 100);
+    //    Assert.Equal(100, getObjects.Count());
 
-        //    for (int i = 0; i < 100; i++)
-        //    {
-        //        await senderHTTPClient.ApiPostQueryAsync(destinationNodeName, "TestObjectType", Random.Shared.Next(0, 10).ToString());
-        //    }
+    //    // delete 100 objects
+    //    foreach (var obj in getObjects)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
+    //    }
 
-        //    var queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
-        //    Assert.Equal(10,queries.Count());
+    //    getObjects = await destinationHTTPClient.ApiGetObjectExchangeAsync(senderNodeName, 1000);
+    //    foreach (var obj in getObjects)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteObjectExchangeAsync(obj.Id);
+    //    }
 
-        //    foreach (var query in queries)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
-        //    }
-
-        //    queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
-
-
-        //    foreach (var query in queries)
-        //    {
-        //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
-        //    }
-        //    Assert.True(queries.Count()==0);
-        //}
+    //    Assert.True(getObjects.Count()==0);
 
 
 
-    }
+    //}
+
+    //[Fact, Priority(3)]
+    //public async void TestQueryExchange()
+    //{
+    //    // логінимось на сервері
+    //    var senderHTTPClient = _factory.CreateClient();
+    //    Assert.True(await senderHTTPClient.Login(senderNodeName, "1"));
+    //    var destinationHTTPClient = _factory.CreateClient();
+    //    Assert.True(await destinationHTTPClient.Login(destinationNodeName, "1"));
+
+    //    for (int i = 0; i < 100; i++)
+    //    {
+    //        await senderHTTPClient.ApiPostQueryAsync(destinationNodeName, "TestObjectType", Random.Shared.Next(0, 10).ToString());
+    //    }
+
+    //    var queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
+    //    Assert.Equal(10,queries.Count());
+
+    //    foreach (var query in queries)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
+    //    }
+
+    //    queries = await destinationHTTPClient.ApiGetQueryObjectAsync(senderNodeName, 100);
+
+
+    //    foreach (var query in queries)
+    //    {
+    //        await destinationHTTPClient.ApiDeleteQueryObjectAsync(query.Id);
+    //    }
+    //    Assert.True(queries.Count()==0);
+    //}
+
+
+
+}

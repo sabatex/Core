@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Moq" />
     <PackageReference Include="xunit.runner.visualstudio">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -24,15 +25,21 @@
     <PackageReference Include="Sabatex.Core" />
     <PackageReference Include="Sabatex.RadzenBlazor" />
     <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.v3.extensibility.core" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ObjectsExchange\ObjectsExchange.csproj" />
     <ProjectReference Include="..\Sabatex.ObjectExchange.ClientDataAdapter.Memory\Sabatex.ObjectExchange.ClientDataAdapter.Memory.csproj" />
     <ProjectReference Include="..\Sabatex.ObjectsExchange.ApiAdapter\Sabatex.ObjectsExchange.ApiAdapter.csproj" />
+    <ProjectReference Include="..\Sabatex.ObjectsExchange.BASAdapter\Sabatex.ObjectsExchange.BASAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>"ObjectsExchange"</_Parameter1>
 	</AssemblyAttribute>
+	  <AssemblyAttribute Include="Xunit.CollectionBehaviorAttribute">
+		  <_Parameter1>DisableTestParallelization = true</_Parameter1>
+		  <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
+	  </AssemblyAttribute>
   </ItemGroup>
 </Project>

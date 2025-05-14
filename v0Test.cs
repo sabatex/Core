@@ -12,46 +12,64 @@ using Xunit;
 using Sabatex.ObjectsExchange.Tests;
 using Sabatex.ObjectsExchange.Models;
 using System.Net;
+using System.Runtime.CompilerServices;
+using Xunit.v3;
 
 
-namespace WebApiDocumentEx.Test;
+namespace Sabatex.ObjectsExchange.Tests;
 [Collection("MyTestCollection")]
-public class v0Test 
+[TestCaseOrderer(typeof(PriorityOrderer))]
+
+public class v0Test
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
     const string apiRoute = "api/v1";
 
-    public v0Test(CustomWebApplicationFactory<Program> factory)
+    public v0Test(CustomWebApplicationFactory factory)
     {
-        //_factory = TestFixture.Instance;
         _factory = factory;
     }
 
-    [Theory]
-    [InlineData("FakeId","FakePassword",false,TestDisplayName ="Fakeall")]
-    [InlineData(TestData.Client1Id, "FakePassword", false, TestDisplayName = "FakePassword")]
-    [InlineData(TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "ValidData")]
-    public async Task Login(string clientId,string password,bool success)
+
+    [Fact,TestPriority(1)]
+    public async Task Initial()
+    {
+        var client = _factory.CreateClient();
+        Assert.NotNull(client);
+        var responce = await client.GetAsync($"{apiRoute}/version");
+        Assert.NotNull(responce);
+        Assert.True(responce.IsSuccessStatusCode);
+    }
+
+    [Fact, TestPriority(2)]
+    public async Task FakeLogin()
+    {
+        var client = _factory.CreateClient();
+        Assert.NotNull(client);
+        var responce = await client.PostAsJsonAsync($"{apiRoute}/login", new { clientId = "FakeId", password = "FakePassword" });
+        Assert.NotNull(responce);
+        Assert.False(responce.IsSuccessStatusCode);
+        responce = await client.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.NodeAId, password = "FakePassword" });
+        Assert.NotNull(responce);
+        Assert.False(responce.IsSuccessStatusCode);
+
+    }
+
+    [Fact,TestPriority(3)]
+    public async Task Login()
     {
         // login client 1
-        var client1 = _factory.CreateClient();
-        Assert.NotNull(client1);
+        var client = _factory.CreateClient();
+        Assert.NotNull(client);
         // bad fake all
-        var responce = await client1.PostAsJsonAsync($"{apiRoute}/login", new { clientId = clientId, password = password });
+        var responce = await client.PostAsJsonAsync($"{apiRoute}/login", new { clientId = TestData.NodeAId, password = TestData.Client1Password });
         Assert.NotNull(responce);
-        if (success)
-        {
-            Assert.True(responce.IsSuccessStatusCode);
-        }
-        else
-        {
-            Assert.False(responce.IsSuccessStatusCode);
-        }
-     }
+        Assert.True(responce.IsSuccessStatusCode);
+    }
     
-    [Theory]
+    [Theory, TestPriority(4)]
     [InlineData("FakeToken", false, "", "", false, TestDisplayName = "Fake token")]
-    [InlineData("FakeToken", true, TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "Fake token, login and refresh token")]
+    [InlineData("FakeToken", true, TestData.NodeAId, TestData.Client1Password, true, TestDisplayName = "Fake token, login and refresh token")]
     public async Task RefreshTokenAsync(string refrtesh_token, bool useLogin, string clientId, string password, bool success)
     {
         var client1 = _factory.CreateClient();
@@ -135,7 +153,7 @@ public class v0Test
     //}
 
 
-    //[Fact, Priority(1)]
+    //[Fact, TestPriority(1)]
     //public async void TestLogin()
     //{
     //    // логінимось на сервері

@@ -24,17 +24,18 @@ using System.Text.Json;
 using System.Text.Unicode;
 using System.Net;
 
-namespace WebApiDocumentEx.Test;
+namespace Sabatex.ObjectsExchange.Tests;
 [Collection("MyTestCollection")]
+//[TestCaseOrderer(typeof(PriorityOrderer))]
 public class v1Test 
 {
     private readonly ITestOutputHelper _output;
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
      
     const string  apiRoute = "api/v1";
 
 
-    public v1Test(CustomWebApplicationFactory<Program> factory, ITestOutputHelper output)
+    public v1Test(CustomWebApplicationFactory factory, ITestOutputHelper output)
     {
         _output = output;
         _factory = factory;
@@ -42,8 +43,8 @@ public class v1Test
 
     [Theory]
     [InlineData("FakeId", "FakePassword", false, TestDisplayName = "Fakeall")]
-    [InlineData(TestData.Client1Id, "FakePassword", false, TestDisplayName = "FakePassword")]
-    [InlineData(TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "ValidData")]
+    [InlineData(TestData.NodeAId, "FakePassword", false, TestDisplayName = "FakePassword")]
+    [InlineData(TestData.NodeAId, TestData.Client1Password, true, TestDisplayName = "ValidData")]
     public async Task Login(string clientId, string password, bool success)
     {
         // login client 1
@@ -65,7 +66,7 @@ public class v1Test
 
     [Theory]
     [InlineData("FakeToken", false, "", "", false, TestDisplayName = "Fake token")]
-    [InlineData("FakeToken", true, TestData.Client1Id, TestData.Client1Password, true, TestDisplayName = "Fake token, login and refresh token")]
+    [InlineData("FakeToken", true, TestData.NodeAId, TestData.Client1Password, true, TestDisplayName = "Fake token, login and refresh token")]
     public async Task RefreshTokenAsync(string refrtesh_token, bool useLogin, string clientId, string password, bool success)
     {
         var client1 = _factory.CreateClient();
@@ -114,9 +115,9 @@ public class v1Test
     //    _output.WriteLine($"Last RefreshToken Execution Time: {stopwatch.ElapsedMilliseconds} ms");
 
     //    stopwatch.Restart();
-    //    var uploads = await _exchangeApiAdapter.GetUploadObjectsAsync(_destination1ExchangeApiAdapter.ClientId, 100);
+    //    var uploads = await _exchangeApiAdapter.GetUploadMessagesAsync(_destination1ExchangeApiAdapter.ClientId, 100);
     //    Assert.Equal(100, uploads.Count());
-    //    _output.WriteLine($"GetUploadObjectsAsync(100) Execution Time: {stopwatch.ElapsedMilliseconds} ms");
+    //    _output.WriteLine($"GetUploadMessagesAsync(100) Execution Time: {stopwatch.ElapsedMilliseconds} ms");
 
     //    stopwatch.Restart();
     //    foreach (var upload in uploads)
@@ -124,7 +125,7 @@ public class v1Test
     //        await _exchangeApiAdapter.PostObjectAsync(_destination1ExchangeApiAdapter.ClientId, upload.MessageHeader, upload.Message,upload.DateStamp);
     //        await _exchangeApiAdapter.RemoveUploadMessageAsync(_destination1ExchangeApiAdapter.ClientId,upload.Id);
     //    }
-    //    uploads = await _exchangeApiAdapter.GetUploadObjectsAsync(_destination1ExchangeApiAdapter.ClientId, 100);
+    //    uploads = await _exchangeApiAdapter.GetUploadMessagesAsync(_destination1ExchangeApiAdapter.ClientId, 100);
     //    Assert.Equal(0, uploads.Count());
     //    _output.WriteLine($"Upload and delete 100 objects Execution Time: {stopwatch.ElapsedMilliseconds} ms");
 
