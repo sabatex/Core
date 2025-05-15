@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
+using System.Reflection.PortableExecutable;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +20,7 @@ public class ExchangeService
 {
     public IExchangeApiAdapter ExchangeApiAdapter { get; private set; }
     public IClientExchangeDataAdapter  DataAdapter { get; private set; }
-
-    public IExchangeObjectAnalizer ExchangeAnalizer { get; private set; }
+    public IExchangeAnalizer ExchangeAnalizer { get; private set; }
 
     /// <summary>
     /// Конструктор обміну даними між вузлом і базою даних.
@@ -29,7 +29,7 @@ public class ExchangeService
     /// <param name="dataAdapter"></param>
     public ExchangeService(IExchangeApiAdapter exchangeApiAdapter,
                            IClientExchangeDataAdapter dataAdapter,
-                           IExchangeObjectAnalizer exchangeAnalizer)
+                           IExchangeAnalizer exchangeAnalizer)
     {
         ExchangeApiAdapter = exchangeApiAdapter;
         DataAdapter = dataAdapter;
@@ -65,15 +65,17 @@ public class ExchangeService
         var data = await DataAdapter.GetUnresolvedMessagesAsync(exchangeNode.DestinationId, exchangeNode.TakeUpload);
         foreach (var message in data) 
         {
-            var context = new AnalizerObjectContext(exchangeNode);
-            if (await ExchangeAnalizer.MessageAnalize(context, message.MessageHeader, message.Message))
+
+            var analizeResult = await ExchangeAnalizer.MessageAnalizeAsync(exchangeNode, message.MessageHeader, message.Message);
+            if (analizeResult.Success)
             {
                 await DataAdapter.RemoveUnresolvedMessageAsync(exchangeNode.DestinationId, message.Id);
             }
             else
             {
-                await DataAdapter.RegisterUnresolvedMessageStatusAsync(exchangeNode.DestinationId, message.Id, string.Join("\r\n", context.ErrorMessages));
+                await DataAdapter.RegisterUnresolvedMessageStatusAsync(exchangeNode.DestinationId, message.Id, analizeResult.ErrorMessage ?? "Відсутня інформація про помилку!");
             }
+   
         }
     }
 
