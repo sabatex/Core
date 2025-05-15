@@ -31,7 +31,6 @@
     <ProjectReference Include="..\ObjectsExchange\ObjectsExchange.csproj" />
     <ProjectReference Include="..\Sabatex.ObjectExchange.ClientDataAdapter.Memory\Sabatex.ObjectExchange.ClientDataAdapter.Memory.csproj" />
     <ProjectReference Include="..\Sabatex.ObjectsExchange.ApiAdapter\Sabatex.ObjectsExchange.ApiAdapter.csproj" />
-    <ProjectReference Include="..\Sabatex.ObjectsExchange.BASAdapter\Sabatex.ObjectsExchange.BASAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

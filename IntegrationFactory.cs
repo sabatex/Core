@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Moq;
 using ObjectsExchange;
+using Sabatex.ObjectExchange.Core;
 using Sabatex.ObjectsExchange.ApiAdapter;
 using Sabatex.ObjectsExchange.BASAdapter;
 using Sabatex.ObjectsExchange.Models;
@@ -28,12 +29,12 @@ namespace Sabatex.ObjectsExchange.Tests
 
         public IntegrationFactory()
         {
-            var mockLocalizer = new Mock<IStringLocalizer<MessageAnalizer>>();
-            mockLocalizer
-                .Setup(m => m[It.IsAny<string>()])
-                .Returns((string key) => new LocalizedString(key, key));
+            //var mockLocalizer = new Mock<IStringLocalizer<MessageAnalizer>>();
+            //mockLocalizer
+            //    .Setup(m => m[It.IsAny<string>()])
+            //    .Returns((string key) => new LocalizedString(key, key));
             
-            var analizer = new MessageAnalizer(mockLocalizer.Object);
+            var analizer = (new  Mock<IExchangeAnalizer>()).Object;
             
             NodeA = new ExchangeService(new ExchangeApiAdapterV2(TestData.NodeAOptions, CreateClient()),
                                         new Sabatex.ObjectExchange.ClientDataAdapter.Memory.DataStorage("MemoryDatabaseA").Initial(TestData.GetNodeAExchangeNodes()),

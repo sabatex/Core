@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Localization;
 using Moq;
 using ObjectsExchange;
+using Sabatex.ObjectExchange.Core;
 using Sabatex.ObjectsExchange.ApiAdapter;
 using Sabatex.ObjectsExchange.BASAdapter;
 using Sabatex.ObjectsExchange.Models;
@@ -28,14 +29,14 @@ namespace Sabatex.ObjectsExchange.Tests
 
         public CustomWebApplicationFactory()
         {
-            var mockLocalizer = new Mock<IStringLocalizer<MessageAnalizer>>();
+            //var mockLocalizer = new Mock<IStringLocalizer<MessageAnalizer>>();
 
             var apiAdapter = new ExchangeApiAdapterV2(TestData.NodeAOptions, CreateClient());
             
             var dataAdapter = new Sabatex.ObjectExchange.ClientDataAdapter.Memory.DataStorage();
             dataAdapter.Initial(TestData.GetNodeAExchangeNodes());
 
-            var analizer = new MessageAnalizer(mockLocalizer.Object);
+            var analizer = (new Mock<IExchangeAnalizer>()).Object;
 
             NodeA = new ExchangeService(apiAdapter, dataAdapter,analizer);
             
