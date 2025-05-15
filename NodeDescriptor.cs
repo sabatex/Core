@@ -25,14 +25,22 @@ namespace Sabatex.ObjectExchange.Core
             _analizers.Add(objectType.ToLower(), typeof(T));
         }
 
-
-        public IObjectAnalizer? GetObjectAnalizer(string objectType)
+        public Type GetAnalizerType(string objectType)
         {
             if (_analizers.TryGetValue(objectType.ToLower(), out var analizer))
             {
-                return  Activator.CreateInstance(analizer) as IObjectAnalizer;
+                return analizer;
             }
-            return null;
+            throw new Exception($"Не знайдено аналізатор для типу {objectType}");
+        }
+
+        public IObjectAnalizer GetObjectAnalizer(string objectType)
+        {
+            if (_analizers.TryGetValue(objectType.ToLower(), out var analizer))
+            {
+                return (Activator.CreateInstance(analizer) ?? throw new Exception("Uknown error if create analizer")) as IObjectAnalizer ?? throw new Exception("The analizator not contains interface IObjectAnalizer");
+            }
+            throw new Exception($"Не знайдено аналізатор для типу {objectType}");
         }
     }
 }
