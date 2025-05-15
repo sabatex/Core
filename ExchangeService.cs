@@ -60,6 +60,8 @@ public class ExchangeService
         }
     }
 
+ 
+
     async Task AnalizeAsync(ExchangeNode exchangeNode)
     {
         var data = await DataAdapter.GetUnresolvedMessagesAsync(exchangeNode.DestinationId, exchangeNode.TakeUpload);
