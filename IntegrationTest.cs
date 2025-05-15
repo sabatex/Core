@@ -1,5 +1,4 @@
-﻿using Sabatex.ObjectsExchange.BASAdapter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +29,7 @@ public class IntegrationTest
             var objectType = fileName.Split(' ')[0];
             var objectId = fileName.Split(' ')[1].Split('.')[0];
             var fileContent = await File.ReadAllTextAsync(file);
-            var messageHeader = BAS.GetObjectHeader(objectType, objectId);
+            var messageHeader = $"{{\"type\":\"{objectType}\",\"id\":\"{objectId}\"}}";
             await _factory.NodeA.DataAdapter.RegisterUploadMessageAsync(_factory.NodeB.ExchangeApiAdapter.ClientId, messageHeader, fileContent);
             await _factory.NodeA.DataAdapter.RegisterUploadMessageAsync(_factory.NodeC.ExchangeApiAdapter.ClientId, messageHeader, fileContent);
         }

@@ -6,7 +6,6 @@ using Moq;
 using ObjectsExchange;
 using Sabatex.ObjectExchange.Core;
 using Sabatex.ObjectsExchange.ApiAdapter;
-using Sabatex.ObjectsExchange.BASAdapter;
 using Sabatex.ObjectsExchange.Models;
 using System;
 using System.Collections.Generic;
