@@ -14,9 +14,11 @@ namespace Sabatex.ObjectExchange.Core
             this.ObjectType = ObjectType;
         }
 
-        public async Task<bool> AnalyzeAsync(AnalizerObjectContextBase context)
+
+        public async Task<AnalizeResult> AnalyzeAsync(AnalizerObjectContext context)
         {
-            return false;
+            context.Error($"Object type {ObjectType} not implemented");
+            return new AnalizeResult(false,string.Join("\r\n",context.ErrorMessages));
         }
 
     }

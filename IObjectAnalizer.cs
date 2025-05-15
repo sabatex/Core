@@ -9,6 +9,6 @@ namespace Sabatex.ObjectExchange.Core
     public interface IObjectAnalizer
     {
         public string ObjectType { get; }
-        public Task<bool> AnalyzeAsync(AnalizerObjectContextBase context);
+        public Task<AnalizeResult> AnalyzeAsync(AnalizerObjectContext context);
     }
 }

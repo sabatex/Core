@@ -13,6 +13,7 @@ namespace Sabatex.ObjectExchange.Core
         /// Тип значення за JSON (String, Number, Object, Array, True, False, Null).
         /// </summary>
         public JsonValueKind Kind { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Скалярне значення (рядок, чи його JSON-представлення для чисел/булевих)
@@ -77,7 +78,7 @@ namespace Sabatex.ObjectExchange.Core
         /// </summary>
         private static JsonValueWrapper ParseValue(JsonElement element)
         {
-            var wrapper = new JsonValueWrapper { Kind = element.ValueKind };
+            var wrapper = new JsonValueWrapper { Kind = element.ValueKind};
 
             switch (element.ValueKind)
             {
