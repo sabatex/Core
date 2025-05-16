@@ -38,18 +38,18 @@ public class IntegrationTest
     [Fact, TestPriority(2)]
     public async Task ExchangeNodeA()
     {
-         await _factory.NodeA.Exchange(asTasks: false);
+         await _factory.NodeA.Exchange(new System.Threading.CancellationToken(), asTasks: false);
     }
 
     [Fact, TestPriority(3)]
     public async Task ExchangeNodeB()
     {
-        await _factory.NodeB.Exchange(asTasks: false);
+        await _factory.NodeB.Exchange(new System.Threading.CancellationToken(), asTasks: false);
     }
     [Fact, TestPriority(3)]
     public async Task ExchangeNodeC()
     {
-        await _factory.NodeC.Exchange(asTasks: false);
+        await _factory.NodeC.Exchange(new System.Threading.CancellationToken(), asTasks: false);
     }
 
 }
