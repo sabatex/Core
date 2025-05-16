@@ -16,7 +16,7 @@ namespace Sabatex.ObjectsExchange.ApiAdapter;
 /// <summary>
 /// Відповідає за сеанс обміну даними між вузлом і базою даних.
 /// </summary>
-public class ExchangeService
+public class ExchangeService: IExchangeService
 {
     public IExchangeApiAdapter ExchangeApiAdapter { get; private set; }
     public IClientExchangeDataAdapter  DataAdapter { get; private set; }
@@ -108,7 +108,7 @@ public class ExchangeService
     }
 
 
-    public async Task Exchange(bool asTasks = false)
+    public async Task Exchange(CancellationToken cancellationToken, bool asTasks = false)
     {
         try
         {
