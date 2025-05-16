@@ -12,6 +12,7 @@ using Sabatex.Extensions.ClassExtensions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Sabatex.ObjectExchange.Core;
 using System.Net.Http;
+using Sabatex.ObjectsExchange.Core;
 
 namespace Sabatex.ObjectsExchange.ApiAdapter;
 
