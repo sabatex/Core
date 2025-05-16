@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sabatex.ObjectsExchange.Models;
+namespace Sabatex.ObjectsExchange.Core;
 
 /// <summary>
 /// Options for Sabatex Exchange
