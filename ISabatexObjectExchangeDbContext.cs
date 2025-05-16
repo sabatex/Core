@@ -14,6 +14,8 @@ namespace Sabatex.ObjectExchange.ClientDataAdapter
         DbSet<UnresolvedObject> UnresolvedObjects { get; set; }
         DbSet<ExchangeNode> ExchangeNodes { get; set; }
 
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
         void SabatexObjectExchangeModelCreating(ModelBuilder builder)
         {
         }
