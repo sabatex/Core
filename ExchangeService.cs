@@ -45,7 +45,7 @@ public class ExchangeService: IExchangeService
         {
             var unresolvedObject = new UnresolvedObject
             {
-                NodeId = exchangeNode.DestinationId,
+                NodeId = exchangeNode.Id,
                 MessageHeader = obj.MessageHeader,
                 Message = obj.Message,
                 DateStamp = DateTime.UtcNow,
@@ -55,7 +55,7 @@ public class ExchangeService: IExchangeService
                 State = "Downloaded from ExchangeServer"
             };
 
-            await DataAdapter.RegisterUnresolvedMessageAsync(exchangeNode.DestinationId, unresolvedObject);
+            await DataAdapter.RegisterUnresolvedMessageAsync(exchangeNode.Id, unresolvedObject);
             await ExchangeApiAdapter.DeleteObjectAsync(obj.Id);
         }
     }
@@ -64,18 +64,18 @@ public class ExchangeService: IExchangeService
 
     async Task AnalizeAsync(ExchangeNode exchangeNode)
     {
-        var data = await DataAdapter.GetUnresolvedMessagesAsync(exchangeNode.DestinationId, exchangeNode.TakeUpload);
+        var data = await DataAdapter.GetUnresolvedMessagesAsync(exchangeNode.Id, exchangeNode.TakeUpload);
         foreach (var message in data) 
         {
 
             var analizeResult = await ExchangeAnalizer.MessageAnalizeAsync(exchangeNode, message.MessageHeader, message.Message);
             if (analizeResult.Success)
             {
-                await DataAdapter.RemoveUnresolvedMessageAsync(exchangeNode.DestinationId, message.Id);
+                await DataAdapter.RemoveUnresolvedMessageAsync(message.Id);
             }
             else
             {
-                await DataAdapter.RegisterUnresolvedMessageStatusAsync(exchangeNode.DestinationId, message.Id, analizeResult.ErrorMessage ?? "Відсутня інформація про помилку!");
+                await DataAdapter.RegisterUnresolvedMessageStatusAsync(exchangeNode.Id, message.Id, analizeResult.ErrorMessage ?? "Відсутня інформація про помилку!");
             }
    
         }
@@ -83,13 +83,13 @@ public class ExchangeService: IExchangeService
 
     async Task UploadAsync(ExchangeNode exchangeNode)
     {
-        var data = await DataAdapter.GetUploadMessagesAsync(exchangeNode.DestinationId, exchangeNode.TakeUpload);
+        var data = await DataAdapter.GetUploadMessagesAsync(exchangeNode.Id, exchangeNode.TakeUpload);
         foreach (var obj in data)
         {
             var messageHeader = obj.MessageHeader;
             var message = obj.Message;
             await ExchangeApiAdapter.PostObjectAsync(exchangeNode.DestinationId, messageHeader, message, DateTime.UtcNow);
-            await DataAdapter.RemoveUploadMessageAsync(exchangeNode.DestinationId, obj.Id);
+            await DataAdapter.RemoveUploadMessageAsync(obj.Id);
         }
     }
 
