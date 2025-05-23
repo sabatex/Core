@@ -45,22 +45,22 @@ public class ExchangeNode:IEntityBase<Guid>,IEntityFieldDescription
     public short TakeUpload { get; set; } = 10;
     public short TakeUnresolved { get; set; } = 10;
 
-    static Dictionary<ExchangeNode,NodeDescriptor> _nodeDescriptors = new Dictionary<ExchangeNode, NodeDescriptor>();
+    static Dictionary<Guid,NodeDescriptor> _nodeDescriptors = new Dictionary<Guid, NodeDescriptor>();
     public NodeDescriptor GetNodeDescriptor()
     {
-        if (_nodeDescriptors.TryGetValue(this, out var nodeDescriptor))
+        if (_nodeDescriptors.TryGetValue(this.DestinationId, out var nodeDescriptor))
             return nodeDescriptor;
-        nodeDescriptor = new NodeDescriptor(this);
-        _nodeDescriptors.Add(this, nodeDescriptor);
+        nodeDescriptor = new NodeDescriptor(this.DestinationId);
+        _nodeDescriptors.Add(this.DestinationId, nodeDescriptor);
         return nodeDescriptor;
     }
 
-    public static void SetNodeDescriptor(ExchangeNode exchangeNode, NodeDescriptor nodeDescriptor)
+    public static void SetNodeDescriptor(Guid destinationId, NodeDescriptor nodeDescriptor)
     {
-        if (_nodeDescriptors.ContainsKey(exchangeNode))
+        if (_nodeDescriptors.ContainsKey(destinationId))
             throw new Exception("The descriptor is exist");
         else
-            _nodeDescriptors.Add(exchangeNode, nodeDescriptor);
+            _nodeDescriptors.Add(destinationId, nodeDescriptor);
     }
 
 }

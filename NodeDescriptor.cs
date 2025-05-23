@@ -9,10 +9,10 @@ namespace Sabatex.ObjectExchange.Core
     public class NodeDescriptor
     {
         private readonly Dictionary<string,Type> _analizers = new Dictionary<string, Type>();
-        private readonly ExchangeNode _exchangeNode;
-        public NodeDescriptor(ExchangeNode exchangeNode)
+        private readonly Guid _destinationId;
+        public NodeDescriptor(Guid destinationId)
         {
-            _exchangeNode = exchangeNode;
+            _destinationId = destinationId;
         }
 
 

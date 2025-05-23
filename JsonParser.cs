@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Sabatex.ObjectExchange.Core
 {
-    public class JsonValueWrapper
+    public class JsonValueWrapper:IEnumerable<JsonValueWrapper>
     {
         /// <summary>
         /// Тип значення за JSON (String, Number, Object, Array, True, False, Null).
@@ -28,7 +29,12 @@ namespace Sabatex.ObjectExchange.Core
         /// Масив – представлений як список словників, якщо елемент є JSON-масивом.
         /// Якщо якийсь елемент масиву не є обʼєктом, то він буде обгорнутий у словник за ключем "value".
         /// </summary>
-        public List<Dictionary<string, JsonValueWrapper>>? ArrayValue { get; set; }
+        public List<JsonValueWrapper>? ArrayValue { get; set; }
+
+
+        private int _index = 0;
+
+
         /// <summary>
         /// Індексатор, який дозволяє отримувати дочірні елементи за ключем.
         /// Якщо поточний елемент не є обʼєктом або в ньому відсутній потрібний ключ – повертається null.
@@ -43,7 +49,28 @@ namespace Sabatex.ObjectExchange.Core
                 return ObjectValue.TryGetValue(key, out var value) ? value : null;
             }
         }
+
+      
+       IEnumerator<JsonValueWrapper> IEnumerable<JsonValueWrapper>.GetEnumerator()
+        {
+            if (Kind != JsonValueKind.Array)
+                throw new Exception("The object is not array!");
+            return ArrayValue.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            if (Kind != JsonValueKind.Array)
+                throw new Exception("The object is not array!");
+            return ArrayValue.GetEnumerator(); 
+        }
+ 
     }
+
+
+
+
+
 
     public class JsonParser
     {
@@ -114,23 +141,20 @@ namespace Sabatex.ObjectExchange.Core
         /// Розбирає JSON-масив і повертає його як List словників.
         /// Припускається, що елементи масиву є об’єктами. Якщо елемент не є об’єктом, він обгортається в словник з ключем "value".
         /// </summary>
-        private static List<Dictionary<string, JsonValueWrapper>> ParseArray(JsonElement element)
+        private static List<JsonValueWrapper> ParseArray(JsonElement element)
         {
-            var list = new List<Dictionary<string, JsonValueWrapper>>();
+            var list = new List<JsonValueWrapper>();
 
             foreach (var item in element.EnumerateArray())
             {
                 if (item.ValueKind == JsonValueKind.Object)
                 {
-                    list.Add(ParseObject(item));
+                    list.Add(new JsonValueWrapper { Kind = item.ValueKind, ObjectValue = ParseObject(item) });
                 }
                 else
                 {
                     // Якщо елемент не об’єкт, обгортаємо його в словник із ключем "value"
-                    list.Add(new Dictionary<string, JsonValueWrapper>
-                {
-                    { "value", ParseValue(item) }
-                });
+                    list.Add(new JsonValueWrapper { Kind = item.ValueKind, ScalarValue = item.GetRawText() });
                 }
             }
 

@@ -14,9 +14,9 @@ public class UnresolvedObject: IEntityBase<Guid>
     public Guid NodeId { get; set; }
     public string MessageHeader { get; set; } = string.Empty;
     public string? Message { get; set; }
-    public DateTime DateStamp { get; set; }
+    public DateTimeOffset DateStamp { get; set; }
     public string State { get; set; }
-    public DateTime? SenderDateStamp { get; set; }
-    public DateTime ServerDateStamp { get; set; }
+    public DateTimeOffset? SenderDateStamp { get; set; }
+    public DateTimeOffset ServerDateStamp { get; set; }
     public short LiveLevel { get; set; }
 }
