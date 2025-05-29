@@ -48,6 +48,6 @@ public interface IClientExchangeDataAdapter
     /// Отримати список вузлів обміну даними.
     /// </summary>
     /// <returns>Список активних вузлів обміну</returns>
-    Task<IEnumerable<ExchangeNode>> GetExchangeNodesAsync();
+    Task<IEnumerable<ExchangeNode>> GetExchangeNodesAsync(bool onlyActive = false);
 
 }
