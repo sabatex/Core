@@ -118,7 +118,7 @@ public class ExchangeService: IExchangeService
         {
             throw new Exception("Error refreshing token", ex);
         }
-        var nodes = await DataAdapter.GetExchangeNodesAsync();
+        var nodes = await DataAdapter.GetExchangeNodesAsync(true);
         foreach (var node in nodes)
         {
             if (asTasks)
