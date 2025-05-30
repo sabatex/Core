@@ -4,6 +4,26 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NeutralLanguage>en-US</NeutralLanguage>
+	<Authors>Serhiy Lakas</Authors>
+	<Copyright>2025, Serhiy Lakas</Copyright>
+	<Product>Core library for exchanging objects</Product>
+	<Description>Core library for exchanging objects, DTO‐mapping and cloning utilities.</Description>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageId>Sabatex.ObjectExchange.Core</PackageId>
+	<PackageTags>
+		Sabatex;
+		ObjectExchange;
+		ObjectMapping;
+		DataTransfer;
+		DTO;
+		Reflection;
+		Serialization;
+		Cloning;
+		Extensions;
+	</PackageTags>
+	<Version>9.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
