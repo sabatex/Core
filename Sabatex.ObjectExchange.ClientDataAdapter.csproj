@@ -8,10 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Sabatex.ObjectExchange.Core\Sabatex.ObjectExchange.Core.csproj" />
+    <PackageReference Include="Sabatex.ObjectExchange.Core" />
   </ItemGroup>
 
 </Project>
