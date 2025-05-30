@@ -5,13 +5,24 @@
     <Nullable>enable</Nullable>
     <Authors>Serhiy Lakas</Authors>
     <Copyright>2025, Serhiy Lakas</Copyright>
-    <Product>Sabatex Exchange API Adapter</Product>
-    <Description>Sabatex Exchange API Adapter</Description>
-    <Company>sabatex on git</Company>
+    <Product>API adapter for Sabatex.ObjectExchange – REST client</Product>
+    <Description>API adapter for Sabatex.ObjectExchange – REST client, DTO serialization and HTTP helpers.</Description>
+
+	 <Company>Sabatex</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>Sabatex.ObjectsExchange.ApiAdapter</PackageId>
-    <PackageTags>#SabatexExchange </PackageTags>
-    <Version>9.0.0-betta1</Version>
+	  <PackageTags>
+		  Sabatex;
+		  ObjectExchange;
+		  ApiAdapter;
+		  RestClient;
+		  HttpClient;
+		  DTO;
+		  Serialization;
+		  Extensions
+	  </PackageTags>
+
+	  <Version>9.0.0</Version>
 	<AssemblyName>Sabatex.ObjectsExchange.ApiAdapter</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
