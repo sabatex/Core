@@ -4,6 +4,26 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NeutralLanguage>en-US</NeutralLanguage>
+	<Authors>Serhiy Lakas</Authors>
+	<Copyright>2025, Serhiy Lakas</Copyright>
+	<Product>Client‐side data adapter for Sabatex.ObjectExchange </Product>
+	<Description>Client‐side data adapter for Sabatex.ObjectExchange – mappings, DTO helpers and serialization.</Description>
+	  <!-- NuGet-теги -->
+	  <PackageTags>
+		  Sabatex;
+		  ObjectExchange;
+		  ClientDataAdapter;
+		  DataAdapter;
+		  DTO;
+		  Mapping;
+		  Serialization;
+		  Extensions;
+	  </PackageTags>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageId>Sabatex.ObjectExchange.ClientDataAdapter</PackageId>
+	  <Version>9.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
