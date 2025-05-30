@@ -16,9 +16,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Sabatex.ObjectsExchange.Models" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sabatex.ObjectExchange.Core\Sabatex.ObjectExchange.Core.csproj" />
-    <ProjectReference Include="..\Sabatex.ObjectsExchange.Models\Sabatex.ObjectsExchange.Models.csproj" />
   </ItemGroup>
 </Project>
