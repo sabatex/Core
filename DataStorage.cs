@@ -91,5 +91,24 @@ namespace Sabatex.ObjectExchange.ClientDataAdapter.Memory
             return RegisterUploadMessageAsync(destination, messageHeader, message);
         }
 
+        public Task RemoveUploadMessageAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveUnresolvedMessageAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CheckExistUnresolvedMessage(Guid nodeId, string messageHeader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<ExchangeNode>> GetExchangeNodesAsync(bool onlyActive = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
