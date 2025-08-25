@@ -85,8 +85,8 @@ public class ApiAdapterTest
         stopwatch.Restart();
         foreach (var upload in uploads)
         {
-            await _exchangeApiAdapter.PostObjectAsync(_destination1ExchangeApiAdapter.ClientId, upload.MessageHeader, upload.Message, upload.DateStamp);
-            await _factory.NodeA.DataAdapter.RemoveUploadMessageAsync(_destination1ExchangeApiAdapter.ClientId, upload.Id);
+            await _exchangeApiAdapter.PostObjectAsync(_destination1ExchangeApiAdapter.ClientId, upload.MessageHeader, upload.Message, DateTime.UtcNow);
+            await _factory.NodeA.DataAdapter.RemoveUploadMessageAsync(upload.Id);
         }
         uploads = await _factory.NodeA.DataAdapter.GetUploadMessagesAsync(_destination1ExchangeApiAdapter.ClientId, 10);
         Assert.Equal(0, uploads.Count());
