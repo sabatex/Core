@@ -1,18 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Sabatex.ObjectExchange.ClientDataAdapter\Sabatex.ObjectExchange.ClientDataAdapter.csproj" />
-    <ProjectReference Include="..\Sabatex.ObjectExchange.Core\Sabatex.ObjectExchange.Core.csproj" />
+    <PackageReference Include="Sabatex.ObjectExchange.ClientDataAdapter" />
+    <PackageReference Include="Sabatex.ObjectExchange.Core" />
   </ItemGroup>
 
 </Project>
