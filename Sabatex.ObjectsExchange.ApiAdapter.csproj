@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Authors>Serhiy Lakas</Authors>
@@ -22,7 +22,7 @@
 		  Extensions
 	  </PackageTags>
 
-	  <Version>9.0.0</Version>
+	  <Version>10.0.0-alpha</Version>
 	<AssemblyName>Sabatex.ObjectsExchange.ApiAdapter</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
