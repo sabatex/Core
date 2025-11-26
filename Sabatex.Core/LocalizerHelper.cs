@@ -39,7 +39,7 @@ public static class LocalizerHelper
         }
         try
         {
-            string localized = resourceManager.GetString(key);
+            var localized = resourceManager?.GetString(key);
             return !string.IsNullOrEmpty(localized) ? localized : key;
         }
         catch (Exception)

@@ -29,7 +29,7 @@ public class TextWriterTraceListenerWithDate: TextWriterTraceListener
     /// specified message. This method is typically used for logging or tracing purposes where timestamps are
     /// required.</remarks>
     /// <param name="message">The message to write to the output. If null, only the date and time are written.</param>
-    public override void WriteLine(string message)
+    public override void WriteLine(string? message)
     {
         base.WriteLine(DateTime.Now.ToString() + " " + message);
     }

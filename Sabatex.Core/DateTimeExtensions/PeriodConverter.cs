@@ -25,7 +25,7 @@ public class PeriodConverter : TypeConverter
     /// parameter can be null.</param>
     /// <param name="destinationType">The Type to which the object is to be converted. Must not be null.</param>
     /// <returns>true if the converter can perform the conversion to the specified destination type; otherwise, false.</returns>
-    public override bool CanConvertTo(ITypeDescriptorContext? context, Type destinationType)
+    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
     {
         return destinationType == typeof(string);
     }
@@ -63,7 +63,7 @@ public class PeriodConverter : TypeConverter
     /// This parameter may be null.</param>
     /// <param name="sourceType">The type of the source object to evaluate for conversion.</param>
     /// <returns>true if the source type is a string; otherwise, false.</returns>
-    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
     {
         return sourceType == typeof(string);
     }
@@ -81,7 +81,7 @@ public class PeriodConverter : TypeConverter
     /// "null".</param>
     /// <returns>A Period object representing the parsed start and end dates. If the input is not a valid string or cannot be
     /// parsed, returns a Period with default values.</returns>
-    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+    public override object ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
         if (value.GetType() == typeof(string))
         {

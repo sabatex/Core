@@ -21,7 +21,7 @@ namespace Sabatex.Extensions
         protected void SetProperty<T>(ref T backingStore,
                                       T value,
                                       [CallerMemberName]string propertyName = "",
-                                      Action onChanged = null)
+                                      Action? onChanged = null)
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
 
@@ -36,7 +36,7 @@ namespace Sabatex.Extensions
         /// <summary>
         /// Occurs when property changed.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         /// <summary>
         /// Raises the PropertyChanged event to notify listeners that a property value has changed.
         /// </summary>

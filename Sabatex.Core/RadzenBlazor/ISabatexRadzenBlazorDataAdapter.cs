@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sabatex.Core.RadzenBlazor;
+using System.Reflection;
 
 namespace Sabatex.Core.RadzenBlazor;
 /// <summary>
@@ -17,29 +18,6 @@ namespace Sabatex.Core.RadzenBlazor;
 /// operations are asynchronous and return tasks that complete when the underlying data operation finishes.</remarks>
 public interface ISabatexRadzenBlazorDataAdapter
 {
-    /// <summary>
-    /// Asynchronously retrieves a collection of items that match the specified query parameters.
-    /// </summary>
-    /// <remarks>This method supports OData query options for flexible data retrieval. The actual support for
-    /// specific query options may depend on the underlying data source or implementation.</remarks>
-    /// <typeparam name="TItem">The type of the items to retrieve. Must implement IEntityBase&lt;TKey&gt;.</typeparam>
-    /// <typeparam name="TKey">The type of the key for the items.</typeparam>
-    /// <param name="filter">An OData filter expression to restrict the results. Can be null to return all items.</param>
-    /// <param name="orderby">An OData orderby expression that determines the sort order of the results. Can be null for default ordering.</param>
-    /// <param name="expand">A comma-separated list of related entities to include in the results. Can be null to exclude related entities.</param>
-    /// <param name="top">The maximum number of items to return. If null, the default or server-defined limit is used. Must be
-    /// non-negative if specified.</param>
-    /// <param name="skip">The number of items to skip before returning results. If null, no items are skipped. Must be non-negative if
-    /// specified.</param>
-    /// <param name="count">A value indicating whether to include the total count of matching items in the result. If <see
-    /// langword="true"/>, the count is included; otherwise, it is omitted.</param>
-    /// <param name="format">The media type to use for the response format. Can be null to use the default format.</param>
-    /// <param name="select">A comma-separated list of properties to include in the results. Can be null to include all properties.</param>
-    /// <param name="apply">An OData apply expression to perform server-side transformations such as grouping or aggregation. Can be null if
-    /// no transformation is needed.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a QueryResult&lt;TItem&gt; with the
-    /// retrieved items and, if requested, the total count.</returns>
-    Task<QueryResult<TItem>> GetAsync<TItem,TKey>(string? filter, string? orderby, string? expand, int? top, int? skip, bool? count, string? format=null, string? select=null, string? apply = null) where TItem : class,IEntityBase<TKey>;
     /// <summary>
     /// Asynchronously retrieves a collection of items that match the specified query parameters.
     /// </summary>
@@ -98,8 +76,180 @@ public interface ISabatexRadzenBlazorDataAdapter
     /// <param name="id">The identifier of the entity to delete.</param>
     /// <returns>A task that represents the asynchronous delete operation.</returns>
     Task DeleteAsync<TItem, TKey>(TKey id) where TItem : class, IEntityBase<TKey>;
-    
+
+    /// <summary>
+    /// Default convenience overloads that allow calling methods without specifying TKey.
+    /// These implementations use a small amount of reflection at type-initialization time and then cache the constructed
+    /// MethodInfo instances to avoid repeated generic construction lookups on each call.
+    /// </summary>
+    /// <typeparam name="TItem">The type of the entity to delete. Must implement IEntityBase&lt;TKey&gt;</typeparam>
+    /// <param name="item">The type of the identifier for the entity.</param>
+    /// <returns>A task that represents the asynchronous delete operation.</returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    async Task<SabatexValidationModel<TItem>> UpdateAsync<TItem>(TItem item)
+        where TItem : class
+    {
+        var mi = DispatchCache<TItem>.UpdateAsyncMethod;
+        var task = (Task<SabatexValidationModel<TItem>>)mi.Invoke(this, new object[] { item })!;
+        return await task;
+    }
+    async Task<SabatexValidationModel<TItem>> PostAsync<TItem>(TItem? item)
+        where TItem : class
+    {
+        var mi = DispatchCache<TItem>.PostAsyncMethod;
+        var task = (Task<SabatexValidationModel<TItem>>)mi.Invoke(this, new object[] { item })!;
+        return await task;
+    }
+
+    async Task<QueryResult<TItem>> GetAsync<TItem>(QueryParams queryParams)
+        where TItem : class
+    {
+        var mi = DispatchCache<TItem>.GetAsyncMethod;
+        var task = (Task<QueryResult<TItem>>)mi.Invoke(this, new object[] { queryParams })!;
+        return await task;
+    }
+
+    async Task<TItem?> GetByIdAsync<TItem>(string id, string? expand = null)
+        where TItem : class
+    {
+        var mi = DispatchCache<TItem>.GetByIdMethod;
+        var task = (Task<TItem?>)mi.Invoke(this, new object[] { id, expand })!;
+        return await task;
+    }
+
+    async Task DeleteAsync<TItem>(object id)
+        where TItem : class
+    {
+        var mi = DispatchCache<TItem>.DeleteAsyncMethod;
+        object? keyValue = DispatchCache<TItem>.ConvertId(id);
+
+        var task = (Task)mi.Invoke(this, new object[] { keyValue! })!;
+        await task;
+    }
+
 }
+
+/// <summary>
+/// Helper that caches the constructed MethodInfo instances for a given TItem type to avoid repeated generic construction.
+/// Initialization runs once per TItem and performs the minimal reflection required to discover the entity key type.
+/// </summary>
+internal static class DispatchCache<TItem> where TItem : class
+{
+    public static readonly Type KeyType;
+    public static readonly MethodInfo UpdateAsyncMethod;
+    public static readonly MethodInfo PostAsyncMethod;
+    public static readonly MethodInfo GetAsyncMethod;
+    public static readonly MethodInfo GetByIdMethod;
+    public static readonly MethodInfo DeleteAsyncMethod;
+
+    static DispatchCache()
+    {
+        var tItem = typeof(TItem);
+        var iface = tItem.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityBase<>));
+        if (iface == null)
+            throw new InvalidOperationException($"Type {tItem.FullName} does not implement IEntityBase<...> required for generic dispatch.");
+
+        KeyType = iface.GetGenericArguments()[0];
+
+        var methods = typeof(ISabatexRadzenBlazorDataAdapter).GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+        var update = methods.First(m => m.Name == nameof(ISabatexRadzenBlazorDataAdapter.UpdateAsync) && m.IsGenericMethodDefinition && m.GetGenericArguments().Length == 2 && m.GetParameters().Length == 1);
+        UpdateAsyncMethod = update.MakeGenericMethod(tItem, KeyType);
+
+        var post = methods.First(m => m.Name == nameof(ISabatexRadzenBlazorDataAdapter.PostAsync) && m.IsGenericMethodDefinition && m.GetGenericArguments().Length == 2 && m.GetParameters().Length == 1);
+        PostAsyncMethod = post.MakeGenericMethod(tItem, KeyType);
+
+        var get = methods.First(m => m.Name == nameof(ISabatexRadzenBlazorDataAdapter.GetAsync) && m.IsGenericMethodDefinition && m.GetGenericArguments().Length == 2 && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(QueryParams));
+        GetAsyncMethod = get.MakeGenericMethod(tItem, KeyType);
+
+        var getByString = methods.First(m => m.Name == nameof(ISabatexRadzenBlazorDataAdapter.GetByIdAsync) && m.IsGenericMethodDefinition && m.GetGenericArguments().Length == 2 && m.GetParameters().Length == 2 && m.GetParameters()[0].ParameterType == typeof(string));
+        GetByIdMethod = getByString.MakeGenericMethod(tItem, KeyType);
+
+        var del = methods.First(m => m.Name == nameof(ISabatexRadzenBlazorDataAdapter.DeleteAsync) && m.IsGenericMethodDefinition && m.GetGenericArguments().Length == 2 && m.GetParameters().Length == 1);
+        DeleteAsyncMethod = del.MakeGenericMethod(tItem, KeyType);
+    }
+
+    /// <summary>
+    /// Convert the provided id to the cached KeyType using fast TryParse/typed conversions for common key types.
+    /// Falls back to Convert.ChangeType when no specific parser is available.
+    /// </summary>
+    public static object? ConvertId(object? id)
+    {
+        if (id == null) return null;
+
+        var target = KeyType;
+        if (target == typeof(object)) return id;
+
+        // If already the right type, return as-is
+        if (id.GetType() == target) return id;
+
+        // Fast paths for common key types
+        if (target == typeof(string)) return id.ToString();
+
+        if (target == typeof(Guid))
+        {
+            if (id is Guid g) return g;
+            var s = id.ToString();
+            if (Guid.TryParse(s, out var parsedG)) return parsedG;
+        }
+
+        if (target == typeof(int))
+        {
+            if (id is int i) return i;
+            var s = id.ToString();
+            if (int.TryParse(s, out var parsedInt)) return parsedInt;
+        }
+
+        if (target == typeof(long))
+        {
+            if (id is long l) return l;
+            var s = id.ToString();
+            if (long.TryParse(s, out var parsedLong)) return parsedLong;
+        }
+
+        // Try nullable int/long wrappers
+        var nullableTarget = Nullable.GetUnderlyingType(target);
+        if (nullableTarget != null)
+        {
+            if (nullableTarget == typeof(Guid))
+            {
+                var s = id.ToString();
+                if (Guid.TryParse(s, out var parsedG)) return (object?)parsedG;
+            }
+            if (nullableTarget == typeof(int))
+            {
+                var s = id.ToString();
+                if (int.TryParse(s, out var parsedInt)) return (object?)parsedInt;
+            }
+            if (nullableTarget == typeof(long))
+            {
+                var s = id.ToString();
+                if (long.TryParse(s, out var parsedLong)) return (object?)parsedLong;
+            }
+        }
+
+        // Fallback to ChangeType which handles IConvertible implementations
+        try
+        {
+            return Convert.ChangeType(id, target);
+        }
+        catch
+        {
+            // as a last resort, try parsing from string via TypeConverter pattern or throw helpful exception
+            var s = id.ToString();
+            if (s != null)
+            {
+                if (target.IsEnum && Enum.TryParse(target, s, out var enumVal)) return enumVal;
+            }
+
+            // rethrow original concept as invalid cast
+            throw new InvalidCastException($"Cannot convert id value of type {id.GetType()} to key type {target}.");
+        }
+    }
+}
+
+
+
 /// <summary>
 /// Represents a descriptor for a field, including its name, type, operation, priority, and optional value. 
 /// </summary>

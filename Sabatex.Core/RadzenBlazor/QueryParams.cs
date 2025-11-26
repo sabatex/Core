@@ -38,7 +38,7 @@ public class QueryParams
     /// <summary>
     /// Include nested entity
     /// </summary>
-    public IEnumerable<string> Include { get; set; }
+    public IEnumerable<string>? Include { get; set; }
     /// <summary>
     /// Initializes a new instance of the QueryParams class with the specified foreign key filter.
     /// </summary>

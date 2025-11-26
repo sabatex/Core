@@ -115,7 +115,7 @@ namespace Sabatex.Core.DateTimeExtensions
         /// <param name="obj">The object to compare with the current Period instance.</param>
         /// <returns>true if the specified object is a Period and has the same Begin and End values as the current instance;
         /// otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null) return false;
             if (obj.GetType() != typeof(Period))

@@ -23,5 +23,5 @@ public class QueryResult<T>
     /// Gets or sets the value.
     /// </summary>
     /// <value>The value.</value>
-    public IEnumerable<T> Value { get; set; }
+    public IEnumerable<T>? Value { get; set; }
 }
