@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
 	<Authors>Serhiy Lakas</Authors>
 	<Copyright>2022, Serhiy Lakas</Copyright>
@@ -11,12 +11,12 @@
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageId>Sabatex.ObjectsExchange.HttpClientConnector</PackageId>
 	<PackageTags>#SabatexExchange </PackageTags>
-	<Version>9.0.0-betta1</Version>
+	<Version>10.0.0-alpha</Version>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sabatex.ObjectsExchange.Models\Sabatex.ObjectsExchange.Models.csproj" />
+    <PackageReference Include="Sabatex.ObjectsExchange.Models" />
   </ItemGroup>
 
 </Project>
