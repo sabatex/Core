@@ -93,14 +93,33 @@ public interface ISabatexRadzenBlazorDataAdapter
         var task = (Task<SabatexValidationModel<TItem>>)mi.Invoke(this, new object[] { item })!;
         return await task;
     }
+    /// <summary>
+    /// Sends the specified item to the server using an HTTP POST request and returns the validation result.
+    /// </summary>
+    /// <typeparam name="TItem">The type of the item to be posted. Must be a reference type.</typeparam>
+    /// <param name="item">The item to post to the server. Can be null if the server endpoint accepts null values.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a SabatexValidationModel{TItem} with
+    /// the validation outcome of the posted item.</returns>
     async Task<SabatexValidationModel<TItem>> PostAsync<TItem>(TItem? item)
         where TItem : class
     {
+        if (item == null)
+        {
+            throw new ArgumentNullException(nameof(item), "Item cannot be null for PostAsync operation.");      
+        }
+
         var mi = DispatchCache<TItem>.PostAsyncMethod;
         var task = (Task<SabatexValidationModel<TItem>>)mi.Invoke(this, new object[] { item })!;
         return await task;
     }
-
+    /// <summary>
+    /// Asynchronously executes a query using the specified parameters and returns the result as a strongly typed
+    /// collection.
+    /// </summary>
+    /// <typeparam name="TItem">The type of the items to be returned in the query result. Must be a reference type.</typeparam>
+    /// <param name="queryParams">The parameters that define the query to execute. Cannot be null.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="QueryResult{TItem}"/>
+    /// with the items matching the query parameters.</returns>
     async Task<QueryResult<TItem>> GetAsync<TItem>(QueryParams queryParams)
         where TItem : class
     {
@@ -108,15 +127,31 @@ public interface ISabatexRadzenBlazorDataAdapter
         var task = (Task<QueryResult<TItem>>)mi.Invoke(this, new object[] { queryParams })!;
         return await task;
     }
-
+    /// <summary>
+    /// Asynchronously retrieves an item of the specified type by its unique identifier.
+    /// </summary>
+    /// <typeparam name="TItem">The type of the item to retrieve. Must be a reference type.</typeparam>
+    /// <param name="id">The unique identifier of the item to retrieve. Cannot be null.</param>
+    /// <param name="expand">An optional comma-separated list of related entities to include in the result. If null, no related entities are
+    /// expanded.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the item if found; otherwise, null.</returns>
     async Task<TItem?> GetByIdAsync<TItem>(string id, string? expand = null)
         where TItem : class
     {
         var mi = DispatchCache<TItem>.GetByIdMethod;
+#pragma warning disable CS8601 // Possible null reference assignment.
         var task = (Task<TItem?>)mi.Invoke(this, new object[] { id, expand })!;
+#pragma warning restore CS8601 // Possible null reference assignment.
         return await task;
     }
-
+    /// <summary>
+    /// Asynchronously deletes an entity of the specified type with the given identifier.
+    /// </summary>
+    /// <remarks>If the entity with the specified identifier does not exist, the operation completes without
+    /// error. This method is typically used to remove entities from a data store by their primary key.</remarks>
+    /// <typeparam name="TItem">The type of the entity to delete. Must be a reference type.</typeparam>
+    /// <param name="id">The identifier of the entity to delete. Must be convertible to the entity's key type and cannot be null.</param>
+    /// <returns>A task that represents the asynchronous delete operation.</returns>
     async Task DeleteAsync<TItem>(object id)
         where TItem : class
     {
