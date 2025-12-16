@@ -1,0 +1,25 @@
+﻿@page "/people/list"
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+@inject ISabatexRadzenBlazorDataAdapter DataAdapter
+@using RadzenBlazorDemo.ClientApp.Models
+@using Sabatex.Core.RadzenBlazor
+
+<SabatexRadzenGrid TItem="Person" TKey="Guid" @ref = "dg" FilterMode="FilterMode.Simple">
+   <Columns>
+        <RadzenDataGridColumn TItem="Person" Property="Name" Title="Name" ></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Person" Property="Birthday" Title="Birthday"></RadzenDataGridColumn>
+    </Columns>
+</SabatexRadzenGrid>
+
+@code {
+
+     SabatexRadzenGrid<Guid, Person> dg;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+    
+
+}
