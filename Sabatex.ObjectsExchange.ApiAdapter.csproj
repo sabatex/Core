@@ -22,12 +22,12 @@
 		  Extensions
 	  </PackageTags>
 
-	  <Version>10.0.0-alpha</Version>
+	  <Version>10.0.0</Version>
 	<AssemblyName>Sabatex.ObjectsExchange.ApiAdapter</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Options" />
-    <PackageReference Include="Sabatex.ObjectExchange.Core" />
-    <PackageReference Include="Sabatex.ObjectsExchange.Models" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+    <PackageReference Include="Sabatex.ObjectExchange.Core" Version="10.0.0" />
+    <PackageReference Include="Sabatex.ObjectsExchange.Models" Version="10.0.0" />
   </ItemGroup>
 </Project>
