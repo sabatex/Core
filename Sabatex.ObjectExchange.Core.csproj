@@ -23,11 +23,11 @@
 		Cloning;
 		Extensions;
 	</PackageTags>
-	<Version>10.0.0-alpha</Version>
+	<Version>10.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sabatex.Core" />
+    <PackageReference Include="Sabatex.Core" Version="10.0.2" />
   </ItemGroup>
 
 </Project>
