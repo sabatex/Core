@@ -12,10 +12,17 @@ namespace Sabatex.ObjectExchange.Core
     public interface IObjectAnalizer
     {
         /// <summary>
-        /// Analyzes an object asynchronously.
+        /// Asynchronously analyzes the object and returns a boolean indicating the success of the operation.
         /// </summary>
-        /// <param name="result" >Optional initial analysis result to be used as a starting point for the analysis. If null, a new analysis will be performed.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains the analysis result.</returns>
-        public Task<AnalizeResult> AnalyzeAsync(AnalizeResult? result);
+        /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating the success of the analysis.</returns>
+        public Task<bool> AnalyzeAsync();
+        /// <summary>
+        /// Represents the result of an analysis operation.
+        /// </summary>
+        public bool Success { get; }
+        /// <summary>
+        /// Gets the error message if the analysis operation failed.
+        /// </summary>
+        public string? ErrorMessage { get; }
     }
 }

@@ -9,7 +9,13 @@ namespace Sabatex.ObjectExchange.Core;
 
 public class ExchangeNode:IEntityBase<Guid>,IEntityFieldDescription
 {
+    /// <summary>
+    /// Унікальний ідентифікатор вузла обміну даними. Використовується для ідентифікації вузла в системі обміну даними та для встановлення зв'язку з іншими сутностями, такими як UnresolvedObject та UploadObject.
+    /// </summary>
     public Guid Id { get; set; }
+    /// <summary>
+    /// Опис вузла обміну даними. Це поле може містити інформацію про призначення вузла, його функціональність або будь-які інші деталі, які допомагають ідентифікувати та розуміти роль цього вузла в системі обміну даними.
+    /// </summary>
     public string Description { get; set; }
     /// <summary>
     /// Вузел призначення обміну
