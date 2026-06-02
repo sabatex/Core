@@ -59,9 +59,6 @@ public class ExchangeService: IExchangeService
             await ExchangeApiAdapter.DeleteObjectAsync(obj.Id);
         }
     }
-
- 
-
     async Task AnalizeAsync(ExchangeNode exchangeNode)
     {
         var data = await DataAdapter.GetUnresolvedMessagesAsync(exchangeNode.Id, exchangeNode.TakeUpload);
@@ -119,18 +116,20 @@ public class ExchangeService: IExchangeService
             throw new Exception("Error refreshing token", ex);
         }
         var nodes = await DataAdapter.GetExchangeNodesAsync(true);
-        foreach (var node in nodes)
+        if (asTasks)
         {
-            if (asTasks)
+            var tasks = new List<Task>();
+            foreach (var node in nodes)
             {
-                Task.Run(() => ExchangeNode(node));
+                tasks.Add(ExchangeNode(node));
             }
-            else
-            {
-                await ExchangeNode(node);
-            }
+            await Task.WhenAll(tasks);
         }
-    }
+        else 
+        {
+            foreach (var node in nodes) await ExchangeNode(node);
+        }
+     }
 
 
 }
