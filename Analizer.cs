@@ -8,26 +8,35 @@ namespace Sabatex.ObjectExchange.Core;
 /// </summary>
 public abstract class Analizer
 {
+    /// <summary>
+    /// Список для зберігання повідомлень про помилки, які виникли під час процесу аналізу. Цей список використовується для збору та управління повідомленнями про помилки, що дозволяє централізовано зберігати інформацію про помилки та забезпечує зручний спосіб отримання конкатенованого рядка повідомлень про помилки через властивість ErrorMessage.
+    /// </summary>
     private List<string> ErrorMessages = new List<string>();
     /// <summary>
-    /// Gets a string that represents the error messages collected during the analysis process. If there are multiple error messages, they are concatenated into a single string with each message separated by a new line. If there are no error messages, an empty string is returned. This property provides a convenient way to access and display the errors encountered during the analysis.
+    /// Отримує конкатенований рядок повідомлень про помилки, зібраних під час процесу аналізу. Ця властивість об'єднує всі повідомлення про помилки, що зберігаються в списку ErrorMessages, у один рядок, розділений символами нового рядка. Це дозволяє легко отримати всі повідомлення про помилки в одному рядку для подальшої обробки або відображення користувачу.
     /// </summary>
     public string ErrorMessage => string.Join(Environment.NewLine, ErrorMessages);
     /// <summary>
-    /// Gets a value indicating whether the analysis was successful. This property returns true if no error messages were collected during the analysis; otherwise, it returns false.
+    /// Отримує значення, що вказує на успішність аналізу. Ця властивість повертає true, якщо під час аналізу не було зібрано жодного повідомлення про помилку; в іншому випадку повертає false.
     /// </summary>
     public bool Success => ErrorMessages.Count == 0;
     /// <summary>
-    /// Adds an error message to the list of error messages and returns false. This method is used to record errors encountered during the analysis process. By calling this method with a specific error message, the message is added to the collection of error messages, and the method returns false to indicate that an error has occurred.
+    /// Додає повідомлення про помилку до списку ErrorMessages та повертає передане значення. Цей метод використовується для позначення виникнення помилки під час процесу аналізу, дозволяючи збирати повідомлення про помилки та повертати відповідне значення для подальшої обробки. Використання цього методу допомагає централізувати управління помилками та забезпечує зручний спосіб додавання повідомлень про помилки до аналізатора.
     /// </summary>
-    /// <param name="message">The error message to add.</param>
-    /// <returns>Always returns false.</returns>
-    protected bool Error(string message)
+    /// <typeparam name="T">Тип значення, яке буде повернуто після додавання повідомлення про помилку.</typeparam>
+    /// <param name="message">Повідомлення про помилку, яке буде додано до списку ErrorMessages.</param>
+    /// <param name="value">Значення, яке буде повернуто після додавання повідомлення про помилку.</param>
+    /// <returns>Повертає передане значення після додавання повідомлення про помилку.</returns>
+    protected T Error<T>(string message, T value)
     {
         ErrorMessages.Add(message);
-        return false;
+        return value;
     }
-    public Task<bool> AnalyzeAsync() 
+    /// <summary>
+    /// Віртуальний метод для виконання процесу аналізу. Цей метод може бути перевизначений у похідних класах для реалізації конкретної логіки аналізу. За замовчуванням, цей метод повертає true, що вказує на успішність аналізу. Похідні класи можуть використовувати цей метод для виконання необхідних перевірок та збору повідомлень про помилки, використовуючи метод Error для позначення виникнення помилок під час аналізу.
+    /// </summary>
+    /// <returns>Повертає значення, що вказує на успішність аналізу.</returns>
+    public virtual Task<bool> AnalyzeAsync() 
     {
         return Task.FromResult(true); 
     }
