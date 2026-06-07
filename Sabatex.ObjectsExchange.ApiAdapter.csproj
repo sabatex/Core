@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
 	<ProjectReference Include="..\Sabatex.ObjectExchange.Core\Sabatex.ObjectExchange.Core.csproj" Condition="'$(Configuration)' == 'Debug'" />
-    <PackageReference Include="Sabatex.ObjectsExchange.Core" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
+    <PackageReference Include="Sabatex.ObjectExchange.Core" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
 	<ProjectReference Include="..\Sabatex.ObjectsExchange.Models\Sabatex.ObjectsExchange.Models.csproj" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Sabatex.ObjectsExchange.Models" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
   </ItemGroup>
