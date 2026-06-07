@@ -1,50 +1,44 @@
-﻿namespace Sabatex.Core;
+namespace Sabatex.Core;
 
 /// <summary>
-/// Base entity methods for (api, ef)
+/// Базовий інтерфейс для сутностей з ключем.
 /// </summary>
 public interface IEntityBase<TKey>// : IEntityBase
 {
     /// <summary>
-    /// Get primary key as string (int,long,Guid,string)
+    /// Первинний ключ  (int,long,Guid,string)
     /// </summary>
     TKey Id { get; set; }
 
     /// <summary>
-    /// Returns a string representation of the object's key identifier.
+    /// Повертає рядкове представлення ідентифікатора ключа об'єкта.
     /// </summary>
-    /// <returns>A string that represents the key identifier. Returns an empty string if the identifier is null.</returns>
+    /// <returns>Рядок, що представляє ідентифікатор ключа. Повертає порожній рядок, якщо ідентифікатор дорівнює     null.</returns>
     string ToKeyString()
     {
         return Id?.ToString() ?? "";
     }
 }
 
-// Marker interfaces for common key types. New code can constrain to these for compile-time safety.
 /// <summary>
-/// Represents an entity that uses a string as its unique key identifier.
+/// Представляє сутність, яка використовує рядок як свій унікальний ідентифікатор.
 /// </summary>
-/// <remarks>This interface is intended for use as a marker to enable compile-time constraints on entities with
-/// string-based keys. It can be used to enforce type safety in generic code that operates on entities with specific key
-/// types.</remarks>
 public interface IEntityWithStringKey : IEntityBase<string> { }
 /// <summary>
-/// Represents an entity that uses an integer as its unique identifier.
+/// Представляє сутність, яка використовує ціле число як свій унікальний ідентифікатор.
 /// </summary>
-/// <remarks>This interface is typically implemented by entity types that require a strongly-typed integer primary
-/// key. It extends the generic IEntityBase interface with an integer key type for convenience and consistency across
-/// the data model.</remarks>
+/// <remarks>Реалізуйте цей інтерфейс, щоб вказати, що сутність використовує ціле число як свій первинний ключ. Це зазвичай
+/// використовується для сутностей, які потребують унікальної ідентифікації в системах або базах даних.</remarks>
 public interface IEntityWithIntKey : IEntityBase<int> { }
 /// <summary>
-/// Represents an entity that uses a 64-bit integer as its unique identifier.
+/// Представляє сутність, яка використовує 64-бітне ціле число як свій унікальний ідентифікатор.
 /// </summary>
-/// <remarks>This interface is typically implemented by domain entities that require a long (Int64) primary key.
-/// It extends the generic IEntityBase interface with a long key type, providing a consistent contract for entities with
-/// long-based identifiers.</remarks>
+/// <remarks>Реалізуйте цей інтерфейс, щоб вказати, що сутність використовує 64-бітне ціле число як свій первинний ключ. Це зазвичай
+/// використовується для сутностей, які потребують унікальної ідентифікації в системах або базах даних, де потрібен великий діапазон чисел.</remarks>
 public interface IEntityWithLongKey : IEntityBase<long> { }
 /// <summary>
-/// Represents an entity that is identified by a globally unique identifier (GUID) key.
+/// Представляє сутність, яка використовує глобально унікальний ідентифікатор (GUID) як свій ключ.
 /// </summary>
-/// <remarks>Implement this interface to indicate that an entity uses a GUID as its primary key. This is commonly
-/// used for entities that require unique identification across distributed systems or databases.</remarks>
+/// <remarks>Реалізуйте цей інтерфейс, щоб вказати, що сутність використовує GUID як свій первинний ключ. Це зазвичай
+/// використовується для сутностей, які потребують унікальної ідентифікації в розподілених системах або базах даних.</remarks>
 public interface IEntityWithGuidKey : IEntityBase<Guid> { }

@@ -1,21 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
 
-namespace Sabatex.Core
+namespace Sabatex.Core;
+
+/// <summary>
+/// Базовий абстрактний клас для сутностей з ключем. 
+/// </summary>
+/// <typeparam name="TKey"></typeparam>
+public abstract class EntityBase<TKey>:IEntityBase<TKey>
 {
     /// <summary>
-    /// for primary key base class 
+    /// первинний ключ (int,long,Guid,string)
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    public abstract class EntityBase<TKey>:IEntityBase<TKey>
-    {
-        /// <summary>
-        /// Primary key
-        /// </summary>
-        public TKey Id { get; set; } = default!;
-    }
+    public TKey Id { get; set; } = default!;
 }
