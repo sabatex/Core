@@ -28,7 +28,7 @@ namespace Sabatex.ObjectExchange.Core
         /// <typeparam name="T">The type of the analyzer to register.</typeparam>
         /// <param name="objectType">The object type for which the analyzer is being registered.</param>
         /// <exception cref="ArgumentException">Thrown if an analyzer for the specified object type is already registered.</exception>
-        public void RegisterAnalizer<T>(string objectType) where T : IObjectAnalizer
+        public void RegisterAnalizer<T>(string objectType) where T : Analizer
         {
             if (_analizers.ContainsKey(objectType.ToLower()))
             {
