@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- Centralized output path for all projects -->
     <!-- Builds will be placed under E:\builds\<ProjectName>\<Configuration> -->
-    <OutputPath>E:\builds\Core\$(MSBuildProjectName)\bin\$(Configuration)\</OutputPath>
-    <BaseIntermediateOutputPath>E:\builds\Core\$(MSBuildProjectName)\obj\$(Configuration)\</BaseIntermediateOutputPath>
+    <OutputPath>C:\Users\serhi\.buids\Core\$(MSBuildProjectName)\bin\$(Configuration)\</OutputPath>
+    <BaseIntermediateOutputPath>C:\Users\serhi\.buids\Core\$(MSBuildProjectName)\obj\$(Configuration)\</BaseIntermediateOutputPath>
   </PropertyGroup>
 </Project>
