@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Authors>Serhiy Lakas</Authors>
+    <Copyright>2022, Serhiy Lakas</Copyright>
+    <Product>Models for Exchange APi</Product>
+    <Description>Models for Exchange APi</Description>
+    <Company>sabatex on git</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageId>Sabatex.ObjectsExchange.Models</PackageId>
+    <PackageTags>#Exchange #API </PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Sabatex.Core" Version="10.2.0" />
+  </ItemGroup>
+</Project>
