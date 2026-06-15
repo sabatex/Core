@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.11205.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sabatex.Core", "Sabatex.Core\Sabatex.Core.csproj", "{EF6B2DDD-A5C1-45C7-A82A-5FF9BC54A767}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.Core.Tests", "Sabatex.Core.Tests\Sabatex.Core.Tests.csproj", "{623BD534-2969-6A27-EF8C-0C213DD2BD6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.Core", "src\Sabatex.Core\Sabatex.Core.csproj", "{5D7044CF-3DEE-0EAC-3BEB-7013DB460D19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.Core.Tests", "tests\Sabatex.Core.Tests\Sabatex.Core.Tests.csproj", "{9F9C46A7-1404-FEEA-2D83-C44B8F59653C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EF6B2DDD-A5C1-45C7-A82A-5FF9BC54A767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF6B2DDD-A5C1-45C7-A82A-5FF9BC54A767}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF6B2DDD-A5C1-45C7-A82A-5FF9BC54A767}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF6B2DDD-A5C1-45C7-A82A-5FF9BC54A767}.Release|Any CPU.Build.0 = Release|Any CPU
-		{623BD534-2969-6A27-EF8C-0C213DD2BD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{623BD534-2969-6A27-EF8C-0C213DD2BD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{623BD534-2969-6A27-EF8C-0C213DD2BD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{623BD534-2969-6A27-EF8C-0C213DD2BD6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D7044CF-3DEE-0EAC-3BEB-7013DB460D19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D7044CF-3DEE-0EAC-3BEB-7013DB460D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D7044CF-3DEE-0EAC-3BEB-7013DB460D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D7044CF-3DEE-0EAC-3BEB-7013DB460D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F9C46A7-1404-FEEA-2D83-C44B8F59653C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F9C46A7-1404-FEEA-2D83-C44B8F59653C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F9C46A7-1404-FEEA-2D83-C44B8F59653C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F9C46A7-1404-FEEA-2D83-C44B8F59653C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
