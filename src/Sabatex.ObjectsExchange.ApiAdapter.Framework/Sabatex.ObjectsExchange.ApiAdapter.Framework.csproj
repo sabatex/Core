@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net35</TargetFramework>
+    <OutputType>Library</OutputType>
+	  <AssemblyName>Sabatex.ObjectsExchange.ApiAdapter</AssemblyName>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <Authors>Serhiy Lakas</Authors>
+	  <Copyright>2025, Serhiy Lakas</Copyright>
+	  <Product>Sabatex Exchange API Adapter</Product>
+	  <Description>Sabatex Exchange API Adapter</Description>
+	  <Company>sabatex on git</Company>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageId>Sabatex.ObjectsExchange.ApiAdapter.Framework</PackageId>
+	  <PackageTags>#SabatexExchange </PackageTags>
+	  <Version>3.5.0-betta1</Version>
+
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json"  VersionOverride="13.0.3" />
+	</ItemGroup>
+
+</Project>
