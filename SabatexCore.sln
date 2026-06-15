@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.11205.157
@@ -6,7 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
-		README.md = README.md`r`nsabatex-publish-solution.json = sabatex-publish-solution.json
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.Core", "src\Sabatex.Core\Sabatex.Core.csproj", "{5D7044CF-3DEE-0EAC-3BEB-7013DB460D19}"
@@ -32,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.ObjectsExchange.HttpClientConnector", "src\Sabatex.ObjectsExchange.HttpClientConnector\Sabatex.ObjectsExchange.HttpClientConnector.csproj", "{D5B96D09-3CF0-4761-90F6-80806D8EE582}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.ObjectsExchange.WebClientConnector", "src\Sabatex.ObjectsExchange.WebClientConnector\Sabatex.ObjectsExchange.WebClientConnector.csproj", "{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.ObjectsExchange.Tests", "tests\Sabatex.ObjectsExchange.Tests\Sabatex.ObjectsExchange.Tests.csproj", "{FB9DA578-81BF-49A4-B2C8-4E172D743D38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +165,18 @@ Global
 		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|x64.Build.0 = Release|Any CPU
 		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|x86.ActiveCfg = Release|Any CPU
 		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|x86.Build.0 = Release|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|x64.Build.0 = Debug|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|x86.Build.0 = Debug|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Release|x64.ActiveCfg = Release|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Release|x64.Build.0 = Release|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Release|x86.ActiveCfg = Release|Any CPU
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +190,7 @@ Global
 		{28DB29B8-9A8E-4638-AC0F-6A9783ED009B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{D5B96D09-3CF0-4761-90F6-80806D8EE582} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{FB9DA578-81BF-49A4-B2C8-4E172D743D38} = {0D340A53-D8AA-46CF-B301-6451CD474049}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {867279D4-3A58-4403-AF90-072696586C2C}
