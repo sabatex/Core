@@ -11,12 +11,11 @@
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageId>Sabatex.ObjectsExchange.HttpClientConnector</PackageId>
 	<PackageTags>#SabatexExchange </PackageTags>
-	<Version>10.0.0-alpha</Version>
-
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sabatex.ObjectsExchange.Models" />
+    <ProjectReference Include="..\Sabatex.ObjectExchange.Models\Sabatex.ObjectExchange.Models.csproj" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Sabatex.ObjectExchange.Models" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
   </ItemGroup>
 
 </Project>

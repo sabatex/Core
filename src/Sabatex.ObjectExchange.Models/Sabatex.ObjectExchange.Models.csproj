@@ -10,7 +10,7 @@
     <Description>Models for Exchange APi</Description>
     <Company>sabatex on git</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageId>Sabatex.ObjectsExchange.Models</PackageId>
+    <PackageId>Sabatex.ObjectExchange.Models</PackageId>
     <PackageTags>#Exchange #API </PackageTags>
   </PropertyGroup>
   <ItemGroup>
