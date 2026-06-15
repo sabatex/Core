@@ -1,7 +1,6 @@
 <Project>
   <PropertyGroup>
-    <!-- Centralized output path for all projects -->
-    <!-- Builds will be placed under E:\builds\<ProjectName>\<Configuration> -->
+	  <Version>10.4.0</Version>
     <OutputPath>C:\Users\serhi\.buids\Core\$(MSBuildProjectName)\bin\$(Configuration)\</OutputPath>
     <BaseIntermediateOutputPath>C:\Users\serhi\.buids\Core\$(MSBuildProjectName)\obj\$(Configuration)\</BaseIntermediateOutputPath>
   </PropertyGroup>
