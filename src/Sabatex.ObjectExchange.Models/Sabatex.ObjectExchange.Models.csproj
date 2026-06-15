@@ -14,6 +14,7 @@
     <PackageTags>#Exchange #API </PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Sabatex.Core" Version="10.2.0" />
+        <ProjectReference Include="..\Sabatex.Core\Sabatex.Core.csproj" Condition="'$(Configuration)' == 'Debug'" />
+	    <PackageReference Include="Sabatex.Core" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,10 @@
 {
   "projects": [
     {
+      "path": "src/Sabatex.Core/Sabatex.Core.csproj",
+      "enabled": true
+    },
+    {
       "path": "src/Sabatex.ObjectExchange.Models/Sabatex.ObjectExchange.Models.csproj",
       "enabled": true
     },
@@ -30,10 +34,6 @@
     },
     {
       "path": "src/Sabatex.ObjectsExchange.WebClientConnector/Sabatex.ObjectsExchange.WebClientConnector.csproj",
-      "enabled": true
-    },
-    {
-      "path": "src/Sabatex.Core/Sabatex.Core.csproj",
       "enabled": true
     }
   ]
