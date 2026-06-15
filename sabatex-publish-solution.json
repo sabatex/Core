@@ -1,0 +1,40 @@
+{
+  "projects": [
+    {
+      "path": "src/Sabatex.ObjectExchange.Models/Sabatex.ObjectExchange.Models.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.ObjectExchange.Core/Sabatex.ObjectExchange.Core.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.ObjectsExchange.ApiAdapter/Sabatex.ObjectsExchange.ApiAdapter.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.ObjectsExchange.ApiAdapter.Framework/Sabatex.ObjectsExchange.ApiAdapter.Framework.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.ObjectExchange.ClientDataAdapter/Sabatex.ObjectExchange.ClientDataAdapter.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.ObjectExchange.ClientDataAdapter.Memory/Sabatex.ObjectExchange.ClientDataAdapter.Memory.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.ObjectsExchange.HttpClientConnector/Sabatex.ObjectsExchange.HttpClientConnector.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.ObjectsExchange.WebClientConnector/Sabatex.ObjectsExchange.WebClientConnector.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.Core/Sabatex.Core.csproj",
+      "enabled": true
+    }
+  ]
+}
