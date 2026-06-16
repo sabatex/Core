@@ -1,0 +1,14 @@
+@using Microsoft.AspNetCore.Components.Authorization
+<AuthorizeView>
+    <Authorized>
+        <form method="post" action="Account/Logout">
+            <AntiforgeryToken />
+            <input type="hidden" name="ReturnUrl" value="" />
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="logout" class="rz-mr-3 rz-my-auto" Variant="Variant.Flat"/>
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        <RadzenLink Icon="login" Path="Account/Login" Text="" class="rz-mr-3 rz-my-auto" />
+    </NotAuthorized>
+</AuthorizeView>
+

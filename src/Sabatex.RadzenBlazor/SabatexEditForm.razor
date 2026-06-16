@@ -1,0 +1,31 @@
+@using Sabatex.Core.RadzenBlazor
+@typeparam TKey
+@typeparam TItem where TItem : class, IEntityBase<TKey>,new()
+@inherits SabatexRadzenBlazorBaseDataComponent
+
+@if (Item == null)
+{
+    <p><em>Loading ...</em></p>
+}
+else
+{
+    <RadzenTemplateForm Data="@Item" TItem="TItem" Submit="OnSubmit">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-mt-4 rz-mb-4">
+            <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Small" Icon="save" Text=@TextButtonSave Disabled="IsReadOnly"/>
+            <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Flat" Size="ButtonSize.Small" Icon="cancel" Text=@TextButtonCancel Click="@Cancel" />
+            @if (Buttons != null)
+            {
+                @Buttons
+            }
+        </RadzenStack>
+       <RadzenRow>
+             <DataAnnotationsValidator />
+             <ValidationSummary />
+            @if (Content !=null)
+            {
+                @Content(Item)
+            }
+        </RadzenRow>
+    </RadzenTemplateForm>
+}
+

@@ -1,0 +1,67 @@
+@using Microsoft.JSInterop
+@using Sabatex.Core
+@using Sabatex.Core.RadzenBlazor
+
+@typeparam TKey
+@typeparam TItem where TItem : class, IEntityBase<TKey>, new()
+@inherits SabatexRadzenBlazorBaseDataComponent
+@inject TooltipService tooltipService
+@inject DialogService DialogService
+
+<div style="display:flex;flex-direction:column;height:100%">
+
+    <RadzenStack Orientation="Orientation.Horizontal" class="rz-py-2">
+    @if (!IsGridRO)
+        {
+            @if (IsInserted)
+            {
+                <RadzenButton class="rz-px-xs-1" 
+                              Icon="add" 
+                              Click="AddButtonClickHandler"
+                              Disabled="IsGridRO" 
+                              MouseEnter="@(args => tooltipService.Open(args, TooltipAddButtonText, null))" />
+            }
+            <RadzenButton class="rz-px-xs-1"
+                          Icon="edit"
+                          Click="EditSelectedItem"
+                          Disabled=@(IsGridRO || !IsItemSelected)  />
+            @if (IsDeleted)
+            {
+                <RadzenButton class="rz-px-xs-1" Icon="delete" Click="()=>DeleteButtonClick(CurrentItem)" Disabled=@(IsGridRO || !IsItemSelected)  />
+            }
+            <RadzenButton class="rz-px-xs-1" Icon="refresh" Click="async ()=>await RefreshAsync()" />
+        }
+        @if (Buttons != null)
+        {
+            @Buttons(CurrentItem)
+        }
+
+    </RadzenStack>
+    <RadzenDataGrid TItem="TItem"
+                    Columns="Columns"
+                    @ref="grid"
+                    Data="@dataCollection.Value"
+                    Count="@dataCollection.Count"
+                    LoadData="@GridLoadData"
+                    IsLoading="@IsGridDataLoading"
+                    AllowFiltering="true"
+                    AllowSorting="true"
+                    SelectionMode="DataGridSelectionMode.Single"
+                    @bind-Value=@SelectedItems
+                    Density="Density.Compact"
+                    AllowVirtualization=true
+                    Style=@gridStyle
+                    RowDoubleClick="@RowDoubleClick"
+                    ContextMenu="ContextMenu"
+                    CellRender="@CellRender"
+                    EditMode="@(EditMode ?? DataGridEditMode.Single)"
+                    FilterMode=@FilterMode
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    @bind-Settings="@Settings" >
+    </RadzenDataGrid>
+
+</div>
+
+@code {
+  
+}
