@@ -1,0 +1,25 @@
+@attribute [Route(WASMClientB.RoutePrefix + "/people/list")]
+
+@inject ISabatexRadzenBlazorDataAdapter DataAdapter
+@using RadzenBlazorDemo.Models
+@using Sabatex.Core.RadzenBlazor
+
+<SabatexRadzenGrid TItem="Person" TKey="Guid" @ref = "dg" FilterMode="FilterMode.Simple">
+   <Columns>
+        <RadzenDataGridColumn TItem="Person" Property="Name" Title="Name" ></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Person" Property="Birthday" Title="Birthday"></RadzenDataGridColumn>
+    </Columns>
+</SabatexRadzenGrid>
+
+@code {
+
+     SabatexRadzenGrid<Guid, Person> dg;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+    
+
+}

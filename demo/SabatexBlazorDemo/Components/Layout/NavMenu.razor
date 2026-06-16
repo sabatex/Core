@@ -1,0 +1,31 @@
+@inject IStringLocalizer<NavMenu> L
+<NavMenuItem Href="/" Text=@L["Home"] Icon="house-door-fill" Exact="true" />
+@foreach (var WASMClient in Sabatex.RadzenBlazor.WASMClientAttribute.WASMClients)
+{
+    <NavMenuItem Href="@WASMClient.PrefixRoute" Text="@WASMClient.PrefixRoute" Icon="app-indicator" />
+}
+
+
+
+@* <RadzenPanelMenuItem Text=@L["Home"] Icon="home" Path="/" />
+<RadzenPanelMenuItem Text=@L["EnumDropDown"] Path="/enumdropdowndemo" />
+<RadzenPanelMenuItem Text=@L["Weather"]  Path="/weather/list" />
+<RadzenPanelMenuItem Text=@L["Auth"]  Path="/auth" />
+<RadzenPanelMenuItem Text=@L["People"] Path="/people/list" />
+<AuthorizeView>
+    <Authorized>
+        <RadzenPanelMenuItem Text=@L["Users edit"] Path="/account/manage/role/list" />
+    </Authorized>
+ </AuthorizeView>
+<UserProfileMenuItem /> 
+<AuthorizeView>
+   <Authorized>
+        <RadzenPanelMenuItem Text=@L["Logout"]  Path="Account/Logout"  />
+    </Authorized>
+    <NotAuthorized>
+        <RadzenPanelMenuItem Text=@L["Register"]  Path="Account/Register" />
+        <RadzenPanelMenuItem Text=@L["Login"]  Path="Account/Login" />
+ 
+    </NotAuthorized>
+</AuthorizeView>
+ *@

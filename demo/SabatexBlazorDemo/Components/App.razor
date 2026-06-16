@@ -1,0 +1,83 @@
+@using Sabatex.RadzenBlazor.Server
+@using System.Reflection
+@using SabatexBlazorDemo.WASMClientA
+@using SabatexBlazorDemo.WASMClientB
+
+<!DOCTYPE html>
+<html lang="@Lang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <ResourcePreloader />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["SabatexBlazorDemo.styles.css"]" />
+    <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <RadzenTheme Theme="material" />
+    <SabatexPWAHeaderContent />
+    <ImportMap />
+    <HeadOutlet @rendermode="@PageRenderMode" />
+</head>
+<body>
+    @if (isWASMClient)
+    {
+        <RoundLoadProgress />
+        @if (HttpContext.IsRouteStartWith(WASMClientA.RoutePrefix))
+        {
+            <WASMClientA  @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender: false))" />
+        }
+        else if (HttpContext.IsRouteStartWith(WASMClientB.RoutePrefix))
+        {
+            <WASMClientB  @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender: false))" />
+        }
+    }
+    else
+    {
+        <SSRRoutes />
+    }
+
+    <script src="_framework/blazor.web.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/service-worker.js');
+           });
+            }
+    </script>
+    <script>
+          window.toggleSidebar = function (state) {
+            const sidebar = document.querySelector('.sidebar');
+            if (!sidebar) return;
+            const isCollapse = sidebar.classList.contains("side-bar-collapse");
+            // toggle: if collapsed -> show, else collapse
+            if (isCollapse) {
+                sidebar.classList.remove("side-bar-collapse");
+            } else {
+                sidebar.classList.add("side-bar-collapse");
+            }
+        }
+    </script>
+</body>
+</html>
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [Parameter] public string Lang { get; set; } = "en";
+
+    private IComponentRenderMode? PageRenderMode => isWASMClient ? new InteractiveWebAssemblyRenderMode(prerender: false) : null;
+
+    private bool isWASMClient;
+
+    bool isRoute(string prefixRoute) => HttpContext.Request.Path.StartsWithSegments(prefixRoute);
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        isWASMClient = HttpContext.IsRouteWASMClient();
+    }
+
+}

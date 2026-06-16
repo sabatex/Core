@@ -1,0 +1,39 @@
+@attribute [Route(WASMClientB.RoutePrefix + "/editFormDemo")]
+@using Microsoft.AspNetCore.Authorization
+@using RadzenBlazorDemo.Models
+@using Sabatex.RadzenBlazor
+
+<div style="border:1px double blue;border-radius:5px;padding:1rem;">
+<SabatexEditForm 
+    Item="@person"
+    TItem="Person"
+    TKey="Guid"
+    IsReadOnly=@isReadOnly
+    ReturnUrl="@returnUrl"
+    IsNew="true">
+    <Content Context="item">
+         <RadzenFormField Text="Name">
+                <RadzenTextBox @bind-Value="person.Name" Name="Name" Placeholder="Enter your name" />
+         </RadzenFormField>
+    </Content>
+</SabatexEditForm>
+</div>
+<div style="margin-top:10px;">
+    <RadzenCheckBox @bind-Value="isReadOnly" Name="CheckBoxReadOnly" />
+    <RadzenLabel Text="Read Only" Component="CheckBoxReadOnly" class="rz-ms-2" />
+
+</div>
+<RadzenTextBox @bind-Value=@returnUrl ></RadzenTextBox>
+
+
+@code {
+    bool isReadOnly = false;
+    string returnUrl = "/enumDropdownDemo";
+
+    private Person person = new Person
+        {
+            Id = Guid.NewGuid(),
+            Name = "John Doe"
+        };
+
+}
