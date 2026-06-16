@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sabatex.ObjectExchange.Models\Sabatex.ObjectExchange.Models.csproj" Condition="'$(Configuration)' == 'Debug'" />
-    <PackageReference Include="Sabatex.ObjectExchange.Models" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
+    <PackageReference Include="Sabatex.ObjectExchange.Models" VersionOverride="$(Version)" Condition="'$(Configuration)' == 'Release'" />
   </ItemGroup>
 
 </Project>

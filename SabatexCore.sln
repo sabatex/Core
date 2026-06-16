@@ -32,8 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.ObjectExchange.Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.ObjectsExchange.HttpClientConnector", "src\Sabatex.ObjectsExchange.HttpClientConnector\Sabatex.ObjectsExchange.HttpClientConnector.csproj", "{D5B96D09-3CF0-4761-90F6-80806D8EE582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.ObjectsExchange.WebClientConnector", "src\Sabatex.ObjectsExchange.WebClientConnector\Sabatex.ObjectsExchange.WebClientConnector.csproj", "{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sabatex.ObjectsExchange.Tests", "tests\Sabatex.ObjectsExchange.Tests\Sabatex.ObjectsExchange.Tests.csproj", "{FB9DA578-81BF-49A4-B2C8-4E172D743D38}"
 EndProject
 Global
@@ -154,18 +152,6 @@ Global
 		{D5B96D09-3CF0-4761-90F6-80806D8EE582}.Release|x64.Build.0 = Release|Any CPU
 		{D5B96D09-3CF0-4761-90F6-80806D8EE582}.Release|x86.ActiveCfg = Release|Any CPU
 		{D5B96D09-3CF0-4761-90F6-80806D8EE582}.Release|x86.Build.0 = Release|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Debug|x64.Build.0 = Debug|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Debug|x86.Build.0 = Debug|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|x64.ActiveCfg = Release|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|x64.Build.0 = Release|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|x86.ActiveCfg = Release|Any CPU
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6}.Release|x86.Build.0 = Release|Any CPU
 		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB9DA578-81BF-49A4-B2C8-4E172D743D38}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -192,7 +178,6 @@ Global
 		{0D173045-4CCC-48A8-A4D9-270F9C131BC8} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{28DB29B8-9A8E-4638-AC0F-6A9783ED009B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{D5B96D09-3CF0-4761-90F6-80806D8EE582} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{C2C3FC04-3B15-4BB4-BC8C-EEB510A415E6} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{FB9DA578-81BF-49A4-B2C8-4E172D743D38} = {0D340A53-D8AA-46CF-B301-6451CD474049}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

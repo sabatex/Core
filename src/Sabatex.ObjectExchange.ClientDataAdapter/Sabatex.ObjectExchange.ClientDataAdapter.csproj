@@ -25,10 +25,13 @@
 	  <PackageId>Sabatex.ObjectExchange.ClientDataAdapter</PackageId>
   </PropertyGroup>
 
-  <ItemGroup>	
-		<PackageReference Include="Microsoft.EntityFrameworkCore"  Version="10.0.4"/>
+  <ItemGroup>
+	<!-- Сторонні пакети - версії з Directory.Packages.props -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore" />
+
+	<!-- Власні бібліотеки Sabatex - Debug: ProjectReference, Release: PackageReference -->
 		<ProjectReference Include="..\Sabatex.ObjectExchange.Core\Sabatex.ObjectExchange.Core.csproj" Condition="'$(Configuration)' == 'Debug'" />
-	    <PackageReference Include="Sabatex.ObjectExchange.Core" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
+		<PackageReference Include="Sabatex.ObjectExchange.Core" VersionOverride="$(Version)" Condition="'$(Configuration)' == 'Release'" />
   </ItemGroup>
 
 </Project>

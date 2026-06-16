@@ -13,17 +13,14 @@ using Xunit;
 using Sabatex.ObjectsExchange.Models;
 using Sabatex.ObjectsExchange.ApiAdapter;
 using Sabatex.ObjectsExchange.Tests;
-using Radzen.Blazor.Rendering;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Engine.ClientProtocol;
-using Org.BouncyCastle.Tls;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using Microsoft.AspNetCore.Identity;
-using Sabatex.ObjectsExchange.Controllers;
 using System.Net;
 
 namespace Sabatex.ObjectsExchange.Tests;

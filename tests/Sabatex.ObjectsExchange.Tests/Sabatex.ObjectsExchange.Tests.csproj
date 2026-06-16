@@ -7,6 +7,7 @@
     <GenerateInternalsVisibleToAttribute>true</GenerateInternalsVisibleToAttribute>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Сторонні пакети - версії з Directory.Packages.props -->
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -21,15 +22,16 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
-    <PackageReference Include="Sabatex.Core" />
-    <PackageReference Include="Sabatex.RadzenBlazor" />
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.v3.extensibility.core" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ObjectsExchange\ObjectsExchange.csproj" />
-    <ProjectReference Include="..\Sabatex.ObjectExchange.ClientDataAdapter.Memory\Sabatex.ObjectExchange.ClientDataAdapter.Memory.csproj" />
-    <ProjectReference Include="..\Sabatex.ObjectsExchange.ApiAdapter\Sabatex.ObjectsExchange.ApiAdapter.csproj" />
+    <!-- Посилання на проекти в src/ -->
+    <ProjectReference Include="..\..\src\Sabatex.Core\Sabatex.Core.csproj" />
+    <ProjectReference Include="..\..\src\Sabatex.ObjectExchange.ClientDataAdapter.Memory\Sabatex.ObjectExchange.ClientDataAdapter.Memory.csproj" />
+    <ProjectReference Include="..\..\src\Sabatex.ObjectsExchange.ApiAdapter\Sabatex.ObjectsExchange.ApiAdapter.csproj" />
+
+    <!-- TODO: Sabatex.RadzenBlazor потрібно додати як проект або видалити, якщо не використовується -->
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

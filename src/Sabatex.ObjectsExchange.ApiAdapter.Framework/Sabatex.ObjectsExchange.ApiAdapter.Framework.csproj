@@ -16,7 +16,8 @@
 
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json"  VersionOverride="13.0.3" />
+	<!-- Сторонні пакети - версію можна перевизначити для .NET Framework 3.5 -->
+		<PackageReference Include="Newtonsoft.Json" VersionOverride="13.0.3" />
 	</ItemGroup>
 
 </Project>

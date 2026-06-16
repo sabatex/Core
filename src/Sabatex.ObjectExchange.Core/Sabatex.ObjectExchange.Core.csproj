@@ -27,7 +27,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Sabatex.Core\Sabatex.Core.csproj" Condition="'$(Configuration)' == 'Debug'" />
-		<PackageReference Include="Sabatex.Core" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
+		<PackageReference Include="Sabatex.Core" VersionOverride="$(Version)" Condition="'$(Configuration)' == 'Release'" />
 	</ItemGroup>
 
 </Project>

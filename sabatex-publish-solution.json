@@ -31,10 +31,6 @@
     {
       "path": "src/Sabatex.ObjectsExchange.HttpClientConnector/Sabatex.ObjectsExchange.HttpClientConnector.csproj",
       "enabled": true
-    },
-    {
-      "path": "src/Sabatex.ObjectsExchange.WebClientConnector/Sabatex.ObjectsExchange.WebClientConnector.csproj",
-      "enabled": true
     }
   ]
 }

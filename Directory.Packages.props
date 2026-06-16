@@ -1,0 +1,46 @@
+<Project>
+  <!-- Central Package Management для сторонніх NuGet пакетів -->
+  <!-- Власні бібліотеки Sabatex керуються через Directory.Build.props $(Version) -->
+
+  <PropertyGroup>
+	<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	<!-- Дозволити локальні перевизначення версій у проектах -->
+	<CentralPackageVersionOverrideEnabled>true</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+
+  <ItemGroup Label="Microsoft Core Packages">
+	<PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.4" />
+	<PackageVersion Include="Microsoft.Extensions.Localization" Version="10.0.4" />
+  </ItemGroup>
+
+  <ItemGroup Label="Entity Framework">
+	<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.4" />
+  </ItemGroup>
+
+  <ItemGroup Label="Test Packages">
+	<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+	<PackageVersion Include="xunit" Version="2.9.3" />
+	<PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+	<PackageVersion Include="xunit.v3" Version="1.0.0" />
+	<PackageVersion Include="xunit.v3.extensibility.core" Version="1.0.0" />
+	<PackageVersion Include="coverlet.collector" Version="6.0.2" />
+	<PackageVersion Include="Moq" Version="4.20.72" />
+  </ItemGroup>
+
+  <ItemGroup Label="ASP.NET Testing">
+	<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
+	<PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.0" />
+	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Serialization">
+	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <!-- 
+  Примітка: Власні пакети Sabatex.* керуються окремо:
+  - Debug: через ProjectReference у .csproj
+  - Release: через PackageReference з Version="$(Version)" з Directory.Build.props
+  -->
+</Project>
