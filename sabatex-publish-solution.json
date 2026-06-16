@@ -31,6 +31,14 @@
     {
       "path": "src/Sabatex.ObjectsExchange.HttpClientConnector/Sabatex.ObjectsExchange.HttpClientConnector.csproj",
       "enabled": true
+    },
+    {
+      "path": "src/Sabatex.RadzenBlazor/Sabatex.RadzenBlazor.csproj",
+      "enabled": true
+    },
+    {
+      "path": "src/Sabatex.RadzenBlazor.Server/Sabatex.RadzenBlazor.Server.csproj",
+      "enabled": true
     }
   ]
 }

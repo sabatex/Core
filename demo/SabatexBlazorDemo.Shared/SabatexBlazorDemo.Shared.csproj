@@ -18,7 +18,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Sabatex.RadzenBlazor\Sabatex.RadzenBlazor.csproj" />
+    <ProjectReference Include="..\..\src\Sabatex.RadzenBlazor\Sabatex.RadzenBlazor.csproj" />
   </ItemGroup>
 
 </Project>
