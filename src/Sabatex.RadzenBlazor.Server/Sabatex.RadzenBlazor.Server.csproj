@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Version will be auto-assigned from WASM library -->
+    <Copyright>Serhiy Lakas</Copyright>
+    <Authors>Serhiy Lakas</Authors>
+    <Title>Sabatex Radzen Blazor Server</Title>
+    <Description>Extend Radzen Blazor Components for Server Side (requires Sabatex.RadzenBlazor WASM library)</Description>
+    <PackageTags>#Blazor</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RepositoryUrl>https://github.com/sabatex/Sabatex.RadzenBlazor</RepositoryUrl>
+  </PropertyGroup>
+
+  <!-- WASM Library Dependency -->
+  <ItemGroup>
+    <!-- Debug: Direct project reference -->
+    <ProjectReference Include="..\Sabatex.RadzenBlazor\Sabatex.RadzenBlazor.csproj" Condition="'$(Configuration)' == 'Debug'" />
+    
+    <!-- Release: NuGet package (version auto-synced from WASM) -->
+    <PackageReference Include="Sabatex.RadzenBlazor" Version="$(Version)" Condition="'$(Configuration)' == 'Release'" />
+  </ItemGroup>
+
+  <!-- Other Dependencies -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="10.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="10.7.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Components\" />
+  </ItemGroup>
+</Project>

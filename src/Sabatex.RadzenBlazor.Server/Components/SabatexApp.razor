@@ -1,0 +1,82 @@
+@using Microsoft.AspNetCore.Http
+@using Radzen.Blazor
+<!DOCTYPE html>
+<html lang="@Lang">
+    <head>
+        <meta charset="@Charset" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <base href="@Href" />
+        <ResourcePreloader />
+        @Head
+        <RadzenTheme Theme="material" />
+        <SabatexPWAHeaderContent />
+        <ImportMap />
+        <HeadOutlet @rendermode="@PageRenderMode" />
+    </head>
+    <body>
+        @if (isWASMClient)
+        {
+            @Body
+            <div id="sabatex-wasm-load-progress">
+                <svg class="loading-progress" >
+                    <circle r="40%" cx="50%" cy="50%" />
+                    <circle r="40%" cx="50%" cy="50%" />
+                </svg> 
+               <div class="loading-progress-text"></div>
+            </div>
+            <script src="_framework/blazor.web.js"></script>
+            <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
+            <script>
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function () {
+                        navigator.serviceWorker.register('/service-worker.js');
+                    });
+                }
+            </script>
+        }else
+        {
+            @Body
+            <script>
+                window.toggleSidebar = function (state) {
+                    const sidebar = document.querySelector('.sidebar');
+                    if (!sidebar) return;
+                    const isCollapse = sidebar.classList.contains("side-bar-collapse");
+                    // toggle: if collapsed -> show, else collapse
+                    if (isCollapse) {
+                        sidebar.classList.remove("side-bar-collapse");
+                    } else {
+                        sidebar.classList.add("side-bar-collapse");
+                    }
+                }
+            </script>
+        }
+    </body>
+</html>
+
+@code {
+    /// <summary>
+    /// The language to use for the application.
+    /// </summary>
+    [Parameter] public string Lang { get; set; } = "uk";
+    [Parameter] public string Charset { get; set; } = "utf-8";
+    [Parameter] public string Href { get; set; } = "/";
+
+    [Parameter]
+    public RenderFragment? Head { get; set; }
+    [Parameter]
+    public RenderFragment? Body { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private IComponentRenderMode? PageRenderMode =>
+     isWASMClient ? new InteractiveWebAssemblyRenderMode(prerender: false) : null;
+
+    private bool isWASMClient;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        isWASMClient = HttpContext.IsRouteWASMClient();
+    }
+}
