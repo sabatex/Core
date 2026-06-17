@@ -12,14 +12,14 @@ namespace Sabatex.ObjectExchange.Core
     public class NodeDescriptor
     {
         private readonly Dictionary<string,Type> _analizers = new Dictionary<string, Type>();
-        private readonly Guid _destinationId;
+        public readonly Guid DestinationId;
         /// <summary>
         /// Initializes a new instance of the NodeDescriptor class with the specified destination ID. The destination ID is used to identify the node in the object exchange system.
         /// </summary>
         /// <param name="destinationId">The unique identifier for the destination node.</param>
         public NodeDescriptor(Guid destinationId)
         {
-            _destinationId = destinationId;
+            DestinationId = destinationId;
         }
 
         /// <summary>

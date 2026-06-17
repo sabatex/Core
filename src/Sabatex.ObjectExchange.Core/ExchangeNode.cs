@@ -60,13 +60,17 @@ public class ExchangeNode:IEntityBase<Guid>,IEntityFieldDescription
         _nodeDescriptors.Add(this.DestinationId, nodeDescriptor);
         return nodeDescriptor;
     }
-
-    public static void SetNodeDescriptor(Guid destinationId, NodeDescriptor nodeDescriptor)
+    /// <summary>
+    /// Встановлює дескриптор для вузла обміну даними. Дескриптор містить інформацію про аналізатори, які використовуються для обробки об'єктів, що надходять до цього вузла. Якщо дескриптор для вказаного DestinationId вже існує, буде викинуто виняток, щоб уникнути конфлікту між різними дескрипторами для одного і того ж вузла. Цей метод дозволяє централізовано керувати дескрипторами для різних вузлів обміну даними та забезпечує узгодженість у використанні аналізаторів для обробки вхідних повідомлень.
+    /// </summary>
+    /// <param name="nodeDescriptor"></param>
+    /// <exception cref="Exception"></exception>
+    public static void SetNodeDescriptor(NodeDescriptor nodeDescriptor)
     {
-        if (_nodeDescriptors.ContainsKey(destinationId))
+        if (_nodeDescriptors.ContainsKey(nodeDescriptor.DestinationId))
             throw new Exception("The descriptor is exist");
         else
-            _nodeDescriptors.Add(destinationId, nodeDescriptor);
+            _nodeDescriptors.Add(nodeDescriptor.DestinationId, nodeDescriptor);
     }
 
 }
