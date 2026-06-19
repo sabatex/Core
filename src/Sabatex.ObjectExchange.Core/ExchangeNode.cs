@@ -10,17 +10,13 @@ namespace Sabatex.ObjectExchange.Core;
 public class ExchangeNode:IEntityBase<Guid>,IEntityFieldDescription
 {
     /// <summary>
-    /// Унікальний ідентифікатор вузла обміну даними. Використовується для ідентифікації вузла в системі обміну даними та для встановлення зв'язку з іншими сутностями, такими як UnresolvedObject та UploadObject.
+    /// Унікальний ідентифікатор вузла обміну даними якмй співпадає з DestinationId. Використовується для ідентифікації вузла в системі обміну даними та для встановлення зв'язку з іншими сутностями, такими як UnresolvedObject та UploadObject.
     /// </summary>
     public Guid Id { get; set; }
     /// <summary>
     /// Опис вузла обміну даними. Це поле може містити інформацію про призначення вузла, його функціональність або будь-які інші деталі, які допомагають ідентифікувати та розуміти роль цього вузла в системі обміну даними.
     /// </summary>
     public string Description { get; set; }
-    /// <summary>
-    /// Вузел призначення обміну
-    /// </summary>
-    public Guid DestinationId { get; set; }
     /// <summary>
     /// Признак активності даного вузла (так - обмін проводити / ні - обмін призупинити) 
     /// </summary>
@@ -54,10 +50,10 @@ public class ExchangeNode:IEntityBase<Guid>,IEntityFieldDescription
     static Dictionary<Guid,NodeDescriptor> _nodeDescriptors = new Dictionary<Guid, NodeDescriptor>();
     public NodeDescriptor GetNodeDescriptor()
     {
-        if (_nodeDescriptors.TryGetValue(this.DestinationId, out var nodeDescriptor))
+        if (_nodeDescriptors.TryGetValue(this.Id, out var nodeDescriptor))
             return nodeDescriptor;
-        nodeDescriptor = new NodeDescriptor(this.DestinationId);
-        _nodeDescriptors.Add(this.DestinationId, nodeDescriptor);
+        nodeDescriptor = new NodeDescriptor(this.Id);
+        _nodeDescriptors.Add(this.Id, nodeDescriptor);
         return nodeDescriptor;
     }
     /// <summary>

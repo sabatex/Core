@@ -16,10 +16,6 @@ public class UploadObject:IEntityBase<Guid>
     /// </summary>
     public Guid Id { get; set; }
     /// <summary>
-    /// Gets or sets the associated ExchangeNode for the upload object. This property represents the node in the object exchange system to which the upload object is related.
-    /// </summary>
-    public ExchangeNode? Node { get; set; }
-    /// <summary>
     /// Gets or sets the unique identifier of the associated ExchangeNode. This property is used to establish a relationship between the upload object and the exchange node.
     /// </summary>
     public Guid NodeId { get; set; }

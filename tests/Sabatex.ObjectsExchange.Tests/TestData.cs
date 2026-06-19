@@ -45,9 +45,8 @@ namespace Sabatex.ObjectsExchange.Tests
         {
             yield return new ExchangeNode
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse(NodeBId),
                 Description = "NodeB",
-                DestinationId = Guid.Parse(NodeBId),
                 IsActive = true,
                 ExchangeMode = ExchangeMode.Auto,
                 IsQueryEnable = true,
@@ -57,9 +56,8 @@ namespace Sabatex.ObjectsExchange.Tests
             };
             yield return new ExchangeNode
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse(NodeCId),
                 Description = "NodeC",
-                DestinationId = Guid.Parse(NodeCId),
                 IsActive = true,
                 ExchangeMode = ExchangeMode.Auto,
                 IsQueryEnable = true,
@@ -73,9 +71,8 @@ namespace Sabatex.ObjectsExchange.Tests
         {
             yield return new ExchangeNode
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse(NodeBId),
                 Description = "NodeA",
-                DestinationId = Guid.Parse(NodeAId),
                 IsActive = true,
                 ExchangeMode = ExchangeMode.Auto,
                 IsQueryEnable = true,
@@ -89,9 +86,8 @@ namespace Sabatex.ObjectsExchange.Tests
         {
             yield return new ExchangeNode
             {
-                Id = Guid.NewGuid(),
-                Description = "NodeA",
-                DestinationId = Guid.Parse(NodeAId),
+                Id = Guid.Parse(NodeCId),
+                Description = "NodeC",
                 IsActive = true,
                 ExchangeMode = ExchangeMode.Auto,
                 IsQueryEnable = true,

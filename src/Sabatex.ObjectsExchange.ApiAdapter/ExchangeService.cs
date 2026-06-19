@@ -37,10 +37,14 @@ public class ExchangeService: IExchangeService
     }
 
 
-
+    /// <summary>
+    /// Завантажити дані з вузла обміну даними та зареєструвати їх у базі даних як невирішені повідомлення.
+    /// </summary>
+    /// <param name="exchangeNode">Вузол обміну даними, з якого будуть завантажені дані.</param>
+    /// <returns></returns>
     async Task DownloadAsync(ExchangeNode exchangeNode)
     {
-      var objects = await ExchangeApiAdapter.GetObjectsAsync(exchangeNode.DestinationId, exchangeNode.TakeDownload);
+        var objects = await ExchangeApiAdapter.GetObjectsAsync(exchangeNode.Id, exchangeNode.TakeDownload);
         foreach (var obj in objects)
         {
             var unresolvedObject = new UnresolvedObject
@@ -59,6 +63,11 @@ public class ExchangeService: IExchangeService
             await ExchangeApiAdapter.DeleteObjectAsync(obj.Id);
         }
     }
+    /// <summary>
+    /// Проаналізувати завантажені дані та визначити, чи можна їх обробити, чи потрібно залишити їх як невирішені повідомлення для подальшого аналізу.
+    /// </summary>
+    /// <param name="exchangeNode">Вузол обміну даними, з якого будуть аналізовані дані.</param>
+    /// <returns></returns>
     async Task AnalizeAsync(ExchangeNode exchangeNode)
     {
         var data = await DataAdapter.GetUnresolvedMessagesAsync(exchangeNode.Id, exchangeNode.TakeUpload);
@@ -77,7 +86,11 @@ public class ExchangeService: IExchangeService
    
         }
     }
-
+    /// <summary>
+    /// Завантажити оброблені дані з бази даних та надіслати їх на вузол обміну даними.
+    /// </summary>
+    /// <param name="exchangeNode">Вузол обміну даними, на який будуть надіслані дані.</param>
+    /// <returns></returns>
     async Task UploadAsync(ExchangeNode exchangeNode)
     {
         var data = await DataAdapter.GetUploadMessagesAsync(exchangeNode.Id, exchangeNode.TakeUpload);
@@ -85,7 +98,7 @@ public class ExchangeService: IExchangeService
         {
             var messageHeader = obj.MessageHeader;
             var message = obj.Message;
-            await ExchangeApiAdapter.PostObjectAsync(exchangeNode.DestinationId, messageHeader, message, DateTime.UtcNow);
+            await ExchangeApiAdapter.PostObjectAsync(exchangeNode.Id, messageHeader, message, DateTime.UtcNow);
             await DataAdapter.RemoveUploadMessageAsync(obj.Id);
         }
     }
@@ -93,7 +106,7 @@ public class ExchangeService: IExchangeService
     /// <summary>
     /// Запустити сеанс обміну даними між вузлом і базою даних.
     /// </summary>
-    /// <param name="exchangeNode"></param>
+    /// <param name="exchangeNode">Вузол обміну даними, з яким буде виконано сеанс обміну даними.</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
     public async Task ExchangeNode(ExchangeNode exchangeNode)
@@ -103,7 +116,13 @@ public class ExchangeService: IExchangeService
         await AnalizeAsync(exchangeNode);
         await UploadAsync(exchangeNode);
     }
-
+    /// <summary>
+    /// Запустити сеанс обміну даними між усіма вузлами та базою даних.
+    /// </summary>
+    /// <param name="cancellationToken">Токен скасування для контролю завершення операції.</param>
+    /// <param name="asTasks">Вказує, чи виконувати обмін даними асинхронно для кожного вузла.</param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
 
     public async Task Exchange(CancellationToken cancellationToken, bool asTasks = false)
     {

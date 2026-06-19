@@ -23,4 +23,9 @@ public class SabatexExchangeOptions
     /// API URL (default is https://sabatex.francecentral.cloudapp.azure.com)
     /// </summary>
     public string ApiUrl { get; set; } = "https://sabatex.francecentral.cloudapp.azure.com";
+    /// <summary>
+    /// Перелік вузлів обміну даними, з якими буде здійснюватися обмін. Кожен вузол обміну даними містить інформацію про пункт призначення,
+    /// кількість об'єктів для завантаження та інші параметри, необхідні для налаштування процесу обміну даними.
+    /// </summary>
+    public IEnumerable<ExchangeNode> ExchangeNodes { get; set; } = Enumerable.Empty<ExchangeNode>();
 }

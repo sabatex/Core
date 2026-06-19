@@ -16,10 +16,6 @@ public class UnresolvedObject: IEntityBase<Guid>
     /// </summary>
     public Guid Id { get; set; }
     /// <summary>
-    /// Gets or sets the associated ExchangeNode for the unresolved object.
-    /// </summary>
-    public ExchangeNode Node { get; set; }
-    /// <summary>
     /// Gets or sets the unique identifier of the associated ExchangeNode.
     /// </summary>
     public Guid NodeId { get; set; }
