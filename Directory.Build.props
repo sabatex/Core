@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-	  <Version>10.4.1-rc10</Version>
+	  <Version>10.5.0-rc5</Version>
     <OutputPath>C:\Users\serhi\.buids\Core\$(MSBuildProjectName)\bin\$(Configuration)\</OutputPath>
     <BaseIntermediateOutputPath>C:\Users\serhi\.buids\Core\$(MSBuildProjectName)\obj\$(Configuration)\</BaseIntermediateOutputPath>
   </PropertyGroup>

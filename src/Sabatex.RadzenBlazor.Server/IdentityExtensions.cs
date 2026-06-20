@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -68,12 +68,9 @@ public static class IdentityExtensions
         return builder;
     }
     /// <summary>
-    /// Adds a user-specific JSON configuration file to the specified <see cref="ConfigurationManager"/> instance if the
-    /// file exists.
+    /// Додає користувацький JSON файл конфігурації до вказаного екземпляра <see cref="ConfigurationManager"/>, якщо файл існує.
     /// </summary>
-    /// <remarks>If the specified configuration file does not exist, no changes are made to the <see
-    /// cref="ConfigurationManager"/>. The configuration file is added as optional and will not reload on
-    /// change.</remarks>
+    /// <remarks>Файл шукається у /etc/sabatex/  linux та {профіль користувача}/.sabatex/ windows Якщо вказаний файл конфігурації не існує, зміни до <see cref="ConfigurationManager"/> не вносяться. Файл конфігурації додається як необов'язковий і не буде перезавантажуватися при зміні.</remarks>
     /// <param name="manager">The <see cref="ConfigurationManager"/> instance to which the user configuration file will be added.</param>
     /// <param name="userFileConfig">The name of the user configuration file to add, located in the '/etc/sabatex/' directory. Cannot be null.</param>
     /// <returns>The <see cref="ConfigurationManager"/> instance with the user configuration file added if the file exists;
@@ -82,9 +79,20 @@ public static class IdentityExtensions
     {
         if (string.IsNullOrEmpty(userFileConfig))
             throw new ArgumentNullException(nameof(userFileConfig));
+
         var confogFileName = $"/etc/sabatex/{userFileConfig}";
         if (File.Exists(confogFileName))
-            manager.AddJsonFile(confogFileName, optional: true, reloadOnChange: false);
+        {
+            // linux path for user-specific configuration file
+            manager.AddJsonFile(confogFileName, optional: true, reloadOnChange: true);
+            return manager;
+        }
+        confogFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".sabatex", userFileConfig);
+        if (File.Exists(confogFileName))
+        {
+            // windows path for user-specific configuration file
+            manager.AddJsonFile(confogFileName, optional: true, reloadOnChange: true);
+        }
         return manager;
     }
     /// <summary>

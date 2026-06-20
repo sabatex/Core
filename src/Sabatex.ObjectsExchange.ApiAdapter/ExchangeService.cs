@@ -1,4 +1,5 @@
-﻿using Sabatex.Extensions.ClassExtensions;
+using Microsoft.Extensions.Options;
+using Sabatex.Extensions.ClassExtensions;
 using Sabatex.ObjectExchange.Core;
 using Sabatex.ObjectsExchange.Models;
 using System;
@@ -21,6 +22,8 @@ public class ExchangeService: IExchangeService
     public IExchangeApiAdapter ExchangeApiAdapter { get; private set; }
     public IClientExchangeDataAdapter  DataAdapter { get; private set; }
     public IExchangeAnalizer ExchangeAnalizer { get; private set; }
+    private readonly IOptions<SabatexExchangeOptions> apiConfig;
+    
 
     /// <summary>
     /// Конструктор обміну даними між вузлом і базою даних.
@@ -29,11 +32,13 @@ public class ExchangeService: IExchangeService
     /// <param name="dataAdapter"></param>
     public ExchangeService(IExchangeApiAdapter exchangeApiAdapter,
                            IClientExchangeDataAdapter dataAdapter,
-                           IExchangeAnalizer exchangeAnalizer)
+                           IExchangeAnalizer exchangeAnalizer,
+                           IOptions<SabatexExchangeOptions> apiConfig)
     {
         ExchangeApiAdapter = exchangeApiAdapter;
         DataAdapter = dataAdapter;
         ExchangeAnalizer = exchangeAnalizer;
+        this.apiConfig = apiConfig;
     }
 
 
@@ -134,11 +139,11 @@ public class ExchangeService: IExchangeService
         {
             throw new Exception("Error refreshing token", ex);
         }
-        var nodes = await DataAdapter.GetExchangeNodesAsync(true);
+        //var nodes = await DataAdapter.GetExchangeNodesAsync(true);
         if (asTasks)
         {
             var tasks = new List<Task>();
-            foreach (var node in nodes)
+            foreach (var node in apiConfig.Value.ExchangeNodes)
             {
                 tasks.Add(ExchangeNode(node));
             }
@@ -146,7 +151,7 @@ public class ExchangeService: IExchangeService
         }
         else 
         {
-            foreach (var node in nodes) await ExchangeNode(node);
+            foreach (var node in apiConfig.Value.ExchangeNodes) await ExchangeNode(node);
         }
      }
 

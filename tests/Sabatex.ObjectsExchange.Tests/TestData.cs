@@ -1,4 +1,4 @@
-﻿using Sabatex.ObjectExchange.Core;
+using Sabatex.ObjectExchange.Core;
 using Sabatex.ObjectsExchange.Models;
 using System;
 using System.Collections.Generic;
@@ -26,79 +26,73 @@ namespace Sabatex.ObjectsExchange.Tests
             {
                 ApiUrl = "https://localhost:5001/api/v2/",
                 ClientId = Guid.Parse(NodeAId),
-                ClientSecret = Client1Password
+                ClientSecret = Client1Password,
+                ExchangeNodes = new List<ExchangeNode>
+                {
+                    new ExchangeNode
+                    {
+                        Id = Guid.Parse(NodeBId),
+                        Description = "NodeB",
+                        IsActive = true,
+                        ExchangeMode = ExchangeMode.Auto,
+                        IsQueryEnable = true,
+                        IsSend = true,
+                        IsParse = true,
+                        TakeDownload = 10
+                    },
+                    new ExchangeNode
+                    {
+                        Id = Guid.Parse(NodeCId),
+                        Description = "NodeC",
+                        IsActive = true,
+                        ExchangeMode = ExchangeMode.Auto,
+                        IsQueryEnable = true,
+                        IsSend = true,
+                        IsParse = true,
+                        TakeDownload = 10
+                    }
+                }
             };
         public static SabatexExchangeOptions NodeBOptions => new SabatexExchangeOptions
         {
             ApiUrl = "https://localhost:5002/api/v2/",
             ClientId = Guid.Parse(NodeBId),
-            ClientSecret = Client2Password
+            ClientSecret = Client2Password,
+            ExchangeNodes = new List<ExchangeNode>
+            {
+                new ExchangeNode
+                {
+                    Id = Guid.Parse(NodeAId),
+                    Description = "NodeA",
+                    IsActive = true,
+                    ExchangeMode = ExchangeMode.Auto,
+                    IsQueryEnable = true,
+                    IsSend = true,
+                    IsParse = true,
+                    TakeDownload = 10
+                }
+            }
         };
         public static SabatexExchangeOptions NodeCOptions => new SabatexExchangeOptions
         {
             ApiUrl = "https://localhost:5003/api/v2/",
             ClientId = Guid.Parse(NodeCId),
-            ClientSecret = Client2Password
+            ClientSecret = Client2Password,
+            ExchangeNodes = new List<ExchangeNode>
+            {
+                new ExchangeNode
+                {
+                    Id = Guid.Parse(NodeAId),
+                    Description = "NodeA",
+                    IsActive = true,
+                    ExchangeMode = ExchangeMode.Auto,
+                    IsQueryEnable = true,
+                    IsSend = true,
+                    IsParse = true,
+                    TakeDownload = 10
+                }
+            }
         };
-
-        public static IEnumerable<ExchangeNode> GetNodeAExchangeNodes()
-        {
-            yield return new ExchangeNode
-            {
-                Id = Guid.Parse(NodeBId),
-                Description = "NodeB",
-                IsActive = true,
-                ExchangeMode = ExchangeMode.Auto,
-                IsQueryEnable = true,
-                IsSend = true,
-                IsParse = true,
-                TakeDownload = 10
-            };
-            yield return new ExchangeNode
-            {
-                Id = Guid.Parse(NodeCId),
-                Description = "NodeC",
-                IsActive = true,
-                ExchangeMode = ExchangeMode.Auto,
-                IsQueryEnable = true,
-                IsSend = true,
-                IsParse = true,
-                TakeDownload = 10
-            };
-        }
-
-        public static IEnumerable<ExchangeNode> GetNodeBExchangeNodes()
-        {
-            yield return new ExchangeNode
-            {
-                Id = Guid.Parse(NodeBId),
-                Description = "NodeA",
-                IsActive = true,
-                ExchangeMode = ExchangeMode.Auto,
-                IsQueryEnable = true,
-                IsSend = true,
-                IsParse = true,
-                TakeDownload = 10
-            };
-        }
-
-        public static IEnumerable<ExchangeNode> GetNodeCExchangeNodes()
-        {
-            yield return new ExchangeNode
-            {
-                Id = Guid.Parse(NodeCId),
-                Description = "NodeC",
-                IsActive = true,
-                ExchangeMode = ExchangeMode.Auto,
-                IsQueryEnable = true,
-                IsSend = true,
-                IsParse = true,
-                TakeDownload = 10
-            };
- 
-        }
-
-
 
     }
 }

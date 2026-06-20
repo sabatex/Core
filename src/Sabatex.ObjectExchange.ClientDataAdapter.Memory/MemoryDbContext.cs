@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Sabatex.ObjectExchange.Core;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,6 @@ namespace Sabatex.ObjectExchange.ClientDataAdapter.Memory
     {
         public DbSet<UploadObject> UploadObjects { get; set; }
         public DbSet<UnresolvedObject> UnresolvedObjects { get; set;}
-        public DbSet<ExchangeNode> ExchangeNodes { get; set; }
         public MemoryDbContext(DbContextOptions options):base(options)
         {
         }

@@ -1,4 +1,4 @@
-﻿
+
 
 using Microsoft.EntityFrameworkCore;
 using Sabatex.ObjectExchange.Core;
@@ -71,21 +71,8 @@ namespace Sabatex.ObjectExchange.ClientDataAdapter.Memory
             return await _memoryDbContext.UnresolvedObjects.Where(s=>s.NodeId == destinationNode).OrderBy(o=>o.Id).Take(take).ToArrayAsync();
         }
 
-        public async Task<IEnumerable<ExchangeNode>> GetExchangeNodesAsync()
-        {
-            return await _memoryDbContext.ExchangeNodes.Where(s=>s.IsActive).ToArrayAsync();
-        }
 
-        public IClientExchangeDataAdapter Initial(IEnumerable<ExchangeNode> exchangeNodes)
-        {
-            foreach (var node in exchangeNodes)
-            {
-                _memoryDbContext.ExchangeNodes.Add(node);
-            }
-            _memoryDbContext.SaveChanges();
-            return this;
-        }
-
+  
         Task IClientExchangeDataAdapter.RegisterUploadMessageAsync(Guid destination, string messageHeader, string message)
         {
             return RegisterUploadMessageAsync(destination, messageHeader, message);

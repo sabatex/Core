@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Localization;
 using Moq;
@@ -33,26 +33,20 @@ namespace Sabatex.ObjectsExchange.Tests
             var apiAdapter = new ExchangeApiAdapterV2(TestData.NodeAOptions, CreateClient());
             
             var dataAdapter = new Sabatex.ObjectExchange.ClientDataAdapter.Memory.DataStorage();
-            dataAdapter.Initial(TestData.GetNodeAExchangeNodes());
 
             var analizer = (new Mock<IExchangeAnalizer>()).Object;
-
-            NodeA = new ExchangeService(apiAdapter, dataAdapter,analizer);
-            
-
-
+            var options = new Options<SabatexExchangeOptions>(TestData.NodeAOptions);
+            NodeA = new ExchangeService(apiAdapter, dataAdapter,analizer, options);
 
             apiAdapter = new ExchangeApiAdapterV2(TestData.NodeBOptions, CreateClient());
-            
             dataAdapter = new Sabatex.ObjectExchange.ClientDataAdapter.Memory.DataStorage();
-            dataAdapter.Initial(TestData.GetNodeAExchangeNodes());
-            NodeB = new ExchangeService(apiAdapter, dataAdapter, analizer);
+            options = new Options<SabatexExchangeOptions>(TestData.NodeBOptions);
+            NodeB = new ExchangeService(apiAdapter, dataAdapter, analizer, options);
             
             apiAdapter = new ExchangeApiAdapterV2(TestData.NodeCOptions, CreateClient());
-            
             dataAdapter = new Sabatex.ObjectExchange.ClientDataAdapter.Memory.DataStorage();
-            dataAdapter.Initial(TestData.GetNodeAExchangeNodes());
-            NodeC = new ExchangeService(apiAdapter, dataAdapter,analizer);
+            options = new Options<SabatexExchangeOptions>(TestData.NodeCOptions);
+            NodeC = new ExchangeService(apiAdapter, dataAdapter,analizer, options);
 
 
 
