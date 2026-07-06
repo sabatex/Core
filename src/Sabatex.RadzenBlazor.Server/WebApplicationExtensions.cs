@@ -44,7 +44,13 @@ public static class WebApplicationExtensions
     }
 
 
-
+    /// <summary>
+    /// Defines a delegate for handling command-line commands asynchronously. This delegate is used to process specific commands and their optional parameters, allowing for custom logic to be executed based on the command received.
+    /// </summary>
+    /// <param name="command">The command to be executed.</param>
+    /// <param name="cmdParam">An optional parameter for the command.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public delegate Task CmdCallbackAsync(CMDCommands command, string? cmdParam = null);
 
     /// <summary>
     /// Run web application with command line arguments
@@ -58,7 +64,6 @@ public static class WebApplicationExtensions
     public static async Task RunAsync(this WebApplication app, string[] args, Func<Task>? initialDatabaseAsync = null, Func<string,Task>? setAdminPrivilegeAsync=null,Func<Task>? migrateAsync = null)
     {
         var serviceProvider = app.Services.CreateScope().ServiceProvider;
-        //var cmd = serviceProvider.GetRequiredService<ICommandLineOperations>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var rootCommand = InitialCMD();
         var parseResult = rootCommand.Parse(args);
@@ -71,7 +76,9 @@ public static class WebApplicationExtensions
         if (migrateRequest)
         {
             if (migrateAsync != null)
+            {
                 await migrateAsync();
+            }
         }
 
  
