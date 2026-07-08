@@ -47,13 +47,22 @@ public class ExchangeNode:IEntityBase<Guid>,IEntityFieldDescription
     public short TakeUpload { get; set; } = 10;
     public short TakeUnresolved { get; set; } = 10;
 
-    static Dictionary<Guid,NodeDescriptor> _nodeDescriptors = new Dictionary<Guid, NodeDescriptor>();
+    /// <summary>
+    /// Назва парсера, який буде використовуватися для обробки вхідних повідомлень від цього вузла. Це поле дозволяє визначити, який конкретний парсер буде застосовуватися для аналізу та обробки даних, що надходять від цього вузла обміну даними. Якщо не вказано інший парсер, за замовчуванням використовується "DefaultParser".
+    /// </summary>
+    public string ParserName { get; set; } = "Default";
+
+    static Dictionary<string,NodeDescriptor> _nodeDescriptors = new Dictionary<string, NodeDescriptor>();
+    /// <summary>
+    /// Отримує дескриптор для вузла обміну даними. Дескриптор містить інформацію про аналізатори, які використовуються для обробки об'єктів, що надходять до цього вузла. Якщо дескриптор для вказаного ParserName вже існує, він буде повернений; інакше буде створено новий дескриптор і додано його до колекції. Цей метод дозволяє централізовано керувати дескрипторами для різних вузлів обміну даними та забезпечує узгодженість у використанні аналізаторів для обробки вхідних повідомлень.
+    /// </summary>
+    /// <returns></returns>
     public NodeDescriptor GetNodeDescriptor()
     {
-        if (_nodeDescriptors.TryGetValue(this.Id, out var nodeDescriptor))
+        if (_nodeDescriptors.TryGetValue(ParserName, out var nodeDescriptor))
             return nodeDescriptor;
-        nodeDescriptor = new NodeDescriptor(this.Id);
-        _nodeDescriptors.Add(this.Id, nodeDescriptor);
+        nodeDescriptor = new NodeDescriptor(this.ParserName);
+        _nodeDescriptors.Add(this.ParserName, nodeDescriptor);
         return nodeDescriptor;
     }
     /// <summary>
@@ -63,10 +72,10 @@ public class ExchangeNode:IEntityBase<Guid>,IEntityFieldDescription
     /// <exception cref="Exception"></exception>
     public static void SetNodeDescriptor(NodeDescriptor nodeDescriptor)
     {
-        if (_nodeDescriptors.ContainsKey(nodeDescriptor.DestinationId))
+        if (_nodeDescriptors.ContainsKey(nodeDescriptor.Name))
             throw new Exception("The descriptor is exist");
         else
-            _nodeDescriptors.Add(nodeDescriptor.DestinationId, nodeDescriptor);
+            _nodeDescriptors.Add(nodeDescriptor.Name, nodeDescriptor);
     }
 
 }

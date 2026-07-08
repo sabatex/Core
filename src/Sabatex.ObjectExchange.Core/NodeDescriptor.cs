@@ -12,14 +12,14 @@ namespace Sabatex.ObjectExchange.Core
     public class NodeDescriptor
     {
         private readonly Dictionary<string,Type> _analizers = new Dictionary<string, Type>();
-        public readonly Guid DestinationId;
+        public readonly string Name;
         /// <summary>
-        /// Initializes a new instance of the NodeDescriptor class with the specified destination ID. The destination ID is used to identify the node in the object exchange system.
+        /// Initializes a new instance of the NodeDescriptor class with the specified name. The name     is used to identify the node in the object exchange system.
         /// </summary>
-        /// <param name="destinationId">The unique identifier for the destination node.</param>
-        public NodeDescriptor(Guid destinationId)
+        /// <param name="name">The name of the node.</param>
+        public NodeDescriptor(string ParserName="Default")
         {
-            DestinationId = destinationId;
+            Name = ParserName;
         }
 
         /// <summary>
@@ -51,13 +51,5 @@ namespace Sabatex.ObjectExchange.Core
             throw new Exception($"Не знайдено аналізатор для типу {objectType}");
         }
         
-        //public IObjectAnalizer GetObjectAnalizer(string objectType)
-        //{
-        //    if (_analizers.TryGetValue(objectType.ToLower(), out var analizer))
-        //    {
-        //        return (Activator.CreateInstance(analizer) ?? throw new Exception("Uknown error if create analizer")) as IObjectAnalizer ?? throw new Exception("The analizator not contains interface IObjectAnalizer");
-        //    }
-        //    throw new Exception($"Не знайдено аналізатор для типу {objectType}");
-        //}
-    }
+     }
 }
