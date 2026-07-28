@@ -1,5 +1,6 @@
 @using Sabatex.RadzenBlazor.Server
 @using System.Reflection
+@using SabatexBlazorDemo.WASMApp
 @using SabatexBlazorDemo.WASMClientA
 @using SabatexBlazorDemo.WASMClientB
 
@@ -14,31 +15,18 @@
     <link rel="stylesheet" href="@Assets["SabatexBlazorDemo.styles.css"]" />
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <RadzenTheme Theme="material" />
+    <RadzenTheme Theme="material" @rendermode="@PageRenderMode" />
     <SabatexPWAHeaderContent />
     <ImportMap />
     <HeadOutlet @rendermode="@PageRenderMode" />
 </head>
 <body>
-    @if (isWASMClient)
-    {
-        <RoundLoadProgress />
-        @if (HttpContext.IsRouteStartWith(WASMClientA.RoutePrefix))
-        {
-            <WASMClientA  @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender: false))" />
-        }
-        else if (HttpContext.IsRouteStartWith(WASMClientB.RoutePrefix))
-        {
-            <WASMClientB  @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender: false))" />
-        }
-    }
-    else
-    {
-        <SSRRoutes />
-    }
-
+    <Routes @rendermode="@PageRenderMode" />
+ 
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
+    <script src="_content/Sabatex.RadzenBlazor/sabatex-radzen-blazor.js"></script>
+    
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
@@ -59,6 +47,7 @@
             }
         }
     </script>
+
 </body>
 </html>
 
@@ -68,16 +57,6 @@
 
     [Parameter] public string Lang { get; set; } = "en";
 
-    private IComponentRenderMode? PageRenderMode => isWASMClient ? new InteractiveWebAssemblyRenderMode(prerender: false) : null;
-
-    private bool isWASMClient;
-
-    bool isRoute(string prefixRoute) => HttpContext.Request.Path.StartsWithSegments(prefixRoute);
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        isWASMClient = HttpContext.IsRouteWASMClient();
-    }
-
+    private IComponentRenderMode? PageRenderMode =>
+        HttpContext.AcceptsInteractiveRouting() ? InteractiveWebAssembly : null;
 }

@@ -114,7 +114,7 @@ var builder = WebApplication.CreateBuilder(args);
                 typeof(Sabatex.RadzenBlazor.Server.ApplicationUser).Assembly
             };
 
-            app.UseSabatexServerBlazor(additionalAssemblies);
+            //app.UseSabatexServerBlazor(additionalAssemblies);
 
             app.MapRazorComponents<App>()
                 .AddInteractiveWebAssemblyRenderMode()
@@ -123,7 +123,7 @@ var builder = WebApplication.CreateBuilder(args);
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();
             app.MapControllers();
-            
+            app.MapFallbackToFile("/wasm-stand-alone/{*path}", "wasm-stand-alone/index.html");
             await app.RunAsync(args,
                 async () => 
                 {

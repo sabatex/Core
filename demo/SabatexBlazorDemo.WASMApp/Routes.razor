@@ -1,6 +1,19 @@
-    <Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Sabatex.RadzenBlazor._Imports).Assembly }" >
+
+@{
+    var additionalAssemblies = new[] {
+        typeof(Sabatex.RadzenBlazor._Imports).Assembly,
+        typeof(SabatexBlazorDemo.WASMClientB._Imports).Assembly,
+        typeof(SabatexBlazorDemo.WASMClientA._Imports).Assembly,
+    };
+}    
+
+<Router AppAssembly="typeof(Program).Assembly"    AdditionalAssemblies="additionalAssemblies" >
         <Found Context="routeData">
-            <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+             <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.Layout)">
+                <NotAuthorized>
+                    <RedirectToLogin />
+                </NotAuthorized>
+            </AuthorizeRouteView>
             <FocusOnNavigate RouteData="routeData" Selector="h1" />
         </Found>
         <NotFound>

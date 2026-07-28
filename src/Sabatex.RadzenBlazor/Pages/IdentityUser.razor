@@ -1,0 +1,43 @@
+﻿@page "/identity-user"
+@using Sabatex.Core.Identity
+@inject IIdentityAdapter IdentityAdapter
+
+
+    <SabatexEditForm TItem="ApplicationUserDto" TKey="string" Item="user">
+        <Content Context="item">
+            <RadzenColumn Size="12" SizeMD="8" SizeLG="6">
+                <RadzenFormField Text="Email" Style="width:100%">
+                    <RadzenTextBox @bind-Value="item.Email" Name="Email" ReadOnly="true" Style="width:100%" />
+                </RadzenFormField>
+                <RadzenFormField Text="Full name" Style="width:100%">
+                    <RadzenTextBox @bind-Value="item.FullName" Name="FullName" Style="width:100%" />
+                </RadzenFormField>
+                <RadzenFormField Text="Phone" Style="width:100%">
+                    <RadzenTextBox @bind-Value="item.PhoneNumber" Name="PhoneNumber" Style="width:100%" />
+                </RadzenFormField>
+                <div class="mt-3">
+                    <RadzenButton Text="Save" Click="@(async args => await Save())" Style="margin-right:8px" ButtonType="ButtonType.Submit" />
+                    @if (!string.IsNullOrEmpty(status))
+                    {
+                        <span class="text-success">@status</span>
+                    }
+                </div>
+            </RadzenColumn>
+        </Content>
+    </SabatexEditForm>
+
+@code {
+    ApplicationUserDto? user;
+    string? status;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await IdentityAdapter.GetUserInfoAsync();
+    }
+
+    async Task Save()
+    {
+        if (user is null) return;
+        await IdentityAdapter.UpdateUserInfoAsync(user);
+    }
+}

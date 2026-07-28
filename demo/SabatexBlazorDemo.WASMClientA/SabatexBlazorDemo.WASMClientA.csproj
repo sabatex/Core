@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SupportedPlatform Include="browser" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
   </ItemGroup>
 
-
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <SupportedPlatform Include="browser" />
   </ItemGroup>
 
 

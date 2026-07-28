@@ -511,6 +511,35 @@ public class IdentityAdapterServer : IIdentityAdapter
     /// <exception cref="NotImplementedException">Thrown in all cases as this method is not yet implemented.</exception>
     public Task<ApplicationUserDto> GetUserInfoAsync(string Id)
     {
-        throw new NotImplementedException();
+        return GetUserInfoByIdAsync(Id);
+    }
+
+    private async Task<ApplicationUserDto> GetUserInfoByIdAsync(string Id)
+    {
+        if (string.IsNullOrEmpty(Id))
+            throw new ArgumentException(_localizer["Id must be provided"], nameof(Id));
+
+        var user = await _userManager.FindByIdAsync(Id);
+        if (user == null)
+        {
+            return new ApplicationUserDto
+            {
+                Id = Id,
+                FullName = string.Empty,
+                Email = string.Empty,
+                PhoneNumber = null,
+                Roles = Array.Empty<string>()
+            };
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        return new ApplicationUserDto
+        {
+            Id = user.Id,
+            FullName = user.FullName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber,
+            Roles = roles
+        };
     }
 }

@@ -23,10 +23,10 @@ public class PersistentAuthenticationStateProvider : AuthenticationStateProvider
 
     private readonly Task<AuthenticationState> authenticationStateTask = defaultUnauthenticatedTask;
 
-    IEnumerable<Claim> GetClaims(UserInfo userInfo)
+    IEnumerable<Claim> GetClaims(ApplicationUserDto userInfo)
     {
             yield return new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString());
-            yield return new Claim(CustomClaimTypes.FullName, userInfo.Name);
+            yield return new Claim(CustomClaimTypes.FullName, userInfo.FullName);
             yield return new Claim(ClaimTypes.Email, userInfo.Email);
             foreach (var role in userInfo.Roles)
             {
@@ -46,7 +46,7 @@ public class PersistentAuthenticationStateProvider : AuthenticationStateProvider
     /// state. Cannot be null.</param>
     public PersistentAuthenticationStateProvider(PersistentComponentState state)
     {
-        if (!state.TryTakeFromJson<UserInfo>(nameof(UserInfo), out var userInfo) || userInfo is null)
+        if (!state.TryTakeFromJson<ApplicationUserDto>(nameof(ApplicationUserDto), out var userInfo) || userInfo is null)
         {
             return;
         }

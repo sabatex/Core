@@ -21,6 +21,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Sabatex.RadzenBlazor.Server\Sabatex.RadzenBlazor.Server.csproj" />
     <ProjectReference Include="..\SabatexBlazorDemo.WASMApp\SabatexBlazorDemo.WASMApp.csproj" />
+    <ProjectReference Include="..\SabatexBlazorDemo.WASMStandAloneWithIdentity\SabatexBlazorDemo.WASMStandAloneWithIdentity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\wasm-stand-alone\" />
   </ItemGroup>
 
 </Project>

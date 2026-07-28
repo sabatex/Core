@@ -294,7 +294,31 @@ public static class IdentityComponentsEndpointRouteBuilderExtensions
         manageGroup.MapGet("/roles",async ([FromServices] IIdentityAdapter adapter) => await adapter.GetAvailableRolesAsync());
 
         var apiGroup = endpoints.MapGroup("/api");
-        apiGroup.MapGet($"/{nameof(ApplicationUserDto)}", async ([FromServices] IIdentityAdapter adapter) => await adapter.GetAvailableRolesAsync());
+        // GET current user info
+        apiGroup.MapGet($"/{nameof(ApplicationUserDto)}", async ([FromServices] IIdentityAdapter adapter) => await adapter.GetUserInfoAsync())
+                .RequireAuthorization();
+
+        // GET user info by id (for admin pages)
+        apiGroup.MapGet($"/{nameof(ApplicationUserDto)}/{{id}}", async ([FromServices] IIdentityAdapter adapter, string id) =>
+            await adapter.GetUserInfoAsync(id)).RequireAuthorization();
+
+        // PUT update user info by id (used by DataAdapter.UpdateAsync -> PUT /api/ApplicationUserDto/{id})
+        apiGroup.MapPut($"/{nameof(ApplicationUserDto)}/{{id}}", async (
+            [FromServices] IIdentityAdapter adapter,
+            string id,
+            [FromBody] ApplicationUserDto userInfo) =>
+        {
+            if (userInfo == null)
+                return Results.BadRequest();
+            if (string.IsNullOrEmpty(userInfo.Id))
+                userInfo.Id = id;
+            if (userInfo.Id != id)
+                return Results.BadRequest("Id mismatch");
+
+            await adapter.UpdateUserInfoAsync(userInfo);
+            var updated = await adapter.GetUserInfoAsync(id);
+            return Results.Ok(updated);
+        }).RequireAuthorization();
 
 
         return accountGroup;
