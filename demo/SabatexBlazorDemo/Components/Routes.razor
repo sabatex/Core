@@ -2,14 +2,14 @@
 @{
     var additionalAssemblies = new[] {
         typeof(Sabatex.RadzenBlazor._Imports).Assembly,
-        typeof(SabatexBlazorDemo.WASMClientB._Imports).Assembly,
-        typeof(SabatexBlazorDemo.WASMClientA._Imports).Assembly,
+        // typeof(SabatexBlazorDemo.WASMClientB._Imports).Assembly,
+        // typeof(SabatexBlazorDemo.WASMClientA._Imports).Assembly,
     };
 }    
 
 <Router AppAssembly="typeof(Program).Assembly"    AdditionalAssemblies="additionalAssemblies" >
         <Found Context="routeData">
-             <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.Layout)">
+             <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
                 <NotAuthorized>
                     <RedirectToLogin />
                 </NotAuthorized>

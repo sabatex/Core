@@ -1,0 +1,21 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "demo\\SabatexBlazorDemo\\SabatexBlazorDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "demo\\SabatexBlazorDemo.WASMStandAloneWithIdentity\\SabatexBlazorDemo.WASMStandAloneWithIdentity.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  },
+  {
+    "Name": "New Profile (1)",
+    "Projects": []
+  }
+]

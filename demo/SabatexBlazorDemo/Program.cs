@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Radzen.Documents.Markdown;
 using RadzenBlazorDemo.Data;
 using RadzenBlazorDemo.Models;
 using RadzenBlazorDemo.Services;
@@ -10,7 +12,6 @@ using Sabatex.Core.RadzenBlazor;
 using Sabatex.RadzenBlazor;
 using Sabatex.RadzenBlazor.Server;
 using SabatexBlazorDemo.Components;
-using SabatexBlazorDemo.WASMClientB;
 using System.Reflection;
 
 
@@ -108,8 +109,8 @@ var builder = WebApplication.CreateBuilder(args);
                 );
 
             var additionalAssemblies = new Assembly[] {
-                typeof(SabatexBlazorDemo.WASMClientA._Imports).Assembly,
-                typeof(SabatexBlazorDemo.WASMClientB._Imports).Assembly,
+                //typeof(SabatexBlazorDemo.WASMClientA._Imports).Assembly,
+                // typeof(SabatexBlazorDemo.WASMClientB._Imports).Assembly,
                 typeof(Sabatex.RadzenBlazor._Imports).Assembly,
                 typeof(Sabatex.RadzenBlazor.Server.ApplicationUser).Assembly
             };
@@ -117,13 +118,13 @@ var builder = WebApplication.CreateBuilder(args);
             //app.UseSabatexServerBlazor(additionalAssemblies);
 
             app.MapRazorComponents<App>()
-                .AddInteractiveWebAssemblyRenderMode()
+                //.AddInteractiveWebAssemblyRenderMode()
                 .AddAdditionalAssemblies(additionalAssemblies);
 
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();
             app.MapControllers();
-            app.MapFallbackToFile("/wasm-stand-alone/{*path}", "wasm-stand-alone/index.html");
+            //app.MapFallbackToFile("/wasm-stand-alone-with-identity/{*path:nonfile}", "wasm-stand-alone-with-identity/index.html");
             await app.RunAsync(args,
                 async () => 
                 {

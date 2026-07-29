@@ -5,8 +5,10 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "commandLineArgs": "--pathbase=/wasm-stand-alone-with-identity",
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/wasm-stand-alone-with-identity/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "applicationUrl": "https://localhost:7288;http://localhost:5004",
+      "launchUrl": "https://localhost:7288/wasm-stand-alone-with-identity/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

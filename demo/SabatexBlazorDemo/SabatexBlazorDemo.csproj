@@ -20,8 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Sabatex.RadzenBlazor.Server\Sabatex.RadzenBlazor.Server.csproj" />
-    <ProjectReference Include="..\SabatexBlazorDemo.WASMApp\SabatexBlazorDemo.WASMApp.csproj" />
-    <ProjectReference Include="..\SabatexBlazorDemo.WASMStandAloneWithIdentity\SabatexBlazorDemo.WASMStandAloneWithIdentity.csproj" />
+    <ProjectReference Include="..\SabatexBlazorDemo.Shared\SabatexBlazorDemo.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,5 @@
 @using Sabatex.RadzenBlazor.Server
 @using System.Reflection
-@using SabatexBlazorDemo.WASMApp
-@using SabatexBlazorDemo.WASMClientA
-@using SabatexBlazorDemo.WASMClientB
 
 <!DOCTYPE html>
 <html lang="@Lang">
@@ -15,13 +12,13 @@
     <link rel="stylesheet" href="@Assets["SabatexBlazorDemo.styles.css"]" />
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <RadzenTheme Theme="material" @rendermode="@PageRenderMode" />
+@*     <RadzenTheme Theme="material" @rendermode="@InteractiveWebAssembly" /> *@
     <SabatexPWAHeaderContent />
     <ImportMap />
-    <HeadOutlet @rendermode="@PageRenderMode" />
+    <HeadOutlet  />
 </head>
 <body>
-    <Routes @rendermode="@PageRenderMode" />
+    <Routes />
  
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
@@ -52,11 +49,12 @@
 </html>
 
 @code {
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+//     [CascadingParameter]
+//     private HttpContext HttpContext { get; set; } = default!;
 
-    [Parameter] public string Lang { get; set; } = "en";
+     [Parameter] public string Lang { get; set; } = "en";
 
-    private IComponentRenderMode? PageRenderMode =>
-        HttpContext.AcceptsInteractiveRouting() ? InteractiveWebAssembly : null;
+//     private IComponentRenderMode? PageRenderMode =>
+//         HttpContext.AcceptsInteractiveRouting() ? InteractiveWebAssembly : null;
+// 
 }
