@@ -6,13 +6,23 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// Register JWT based authentication where backend is same domain
+builder.Services.AddOptions();
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider, SabatexBlazorDemo.WASMStandAloneWithIdentity.Services.JwtAuthenticationStateProvider>();
+builder.Services.AddScoped<SabatexBlazorDemo.WASMStandAloneWithIdentity.Services.JwtAuthenticationStateProvider>();
+builder.Services.AddScoped<SabatexBlazorDemo.WASMStandAloneWithIdentity.Services.JwtAuthorizationMessageHandler>();
 
-builder.Services.AddOidcAuthentication(options =>
+// HttpClient that automatically adds Bearer token from localStorage
+builder.Services.AddScoped(sp =>
 {
-    // Configure your authentication provider options here.
-    // For more information, see https://aka.ms/blazor-standalone-auth
-    builder.Configuration.Bind("Local", options.ProviderOptions);
+    var js = sp.GetRequiredService<Microsoft.JSInterop.IJSRuntime>();
+    var handler = sp.GetRequiredService<SabatexBlazorDemo.WASMStandAloneWithIdentity.Services.JwtAuthorizationMessageHandler>();
+    var client = new HttpClient(handler)
+    {
+        BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    };
+    return client;
 });
 
 await builder.Build().RunAsync();

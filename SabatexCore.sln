@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SabatexBlazorDemo.WASMClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SabatexBlazorDemo.WASMStandAloneWithIdentity", "demo\SabatexBlazorDemo.WASMStandAloneWithIdentity\SabatexBlazorDemo.WASMStandAloneWithIdentity.csproj", "{CAACF77E-5B89-4240-9379-3C48B0548438}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{6A77F23E-8BDF-40F8-BC21-5298EBC453F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

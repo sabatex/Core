@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -37,13 +38,34 @@ var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddCascadingAuthenticationState();
             
 
-            builder.Services.AddAuthentication(options =>
+            var authBuilder = builder.Services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = IdentityConstants.ApplicationScheme;
                     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-                })
-                .AddIsConfiguredMicrosoft(builder.Configuration) 
-                .AddIsConfiguredGoogle(builder.Configuration);
+                });
+
+            authBuilder.AddIsConfiguredMicrosoft(builder.Configuration)
+                       .AddIsConfiguredGoogle(builder.Configuration);
+
+            // JWT configuration for API clients (WASM)
+            var jwtKey = builder.Configuration["Jwt:Key"] ?? "ChangeThisSecretForProduction_ReplaceIt";
+            var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? builder.Configuration["ApplicationUrl"] ?? "https://localhost";
+            var signingKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtKey));
+
+            authBuilder.AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtIssuer,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = signingKey,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(2)
+                };
+            });
             builder.Services.AddAuthorization();
 
                 
@@ -74,6 +96,10 @@ var builder = WebApplication.CreateBuilder(args);
             });
 
             var app = builder.Build();
+
+            // Enable authentication/authorization middleware
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             using (var scope = app.Services.CreateScope())
             {
@@ -123,6 +149,52 @@ var builder = WebApplication.CreateBuilder(args);
 
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();
+
+            // Token endpoint for JWT issuance for SPA clients
+            app.MapPost("/api/token", async (
+                [FromServices] UserManager<ApplicationUser> userManager,
+                [FromServices] SignInManager<ApplicationUser> signInManager,
+                [FromServices] IConfiguration config,
+                [FromBody] Microsoft.AspNetCore.Identity.Data.LoginRequest model) =>
+            {
+                if (model == null || string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
+                    return Results.BadRequest(new { error = "invalid_request" });
+
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                    return Results.Unauthorized();
+
+                var pwValid = await userManager.CheckPasswordAsync(user, model.Password);
+                if (!pwValid)
+                    return Results.Unauthorized();
+
+                var roles = await userManager.GetRolesAsync(user);
+                var claims = new List<System.Security.Claims.Claim>
+                {
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id),
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, user.UserName ?? user.Email ?? string.Empty),
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, user.Email ?? string.Empty),
+                };
+                claims.AddRange(roles.Select(r => new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, r)));
+
+                var jwtKey = config["Jwt:Key"] ?? "ChangeThisSecretForProduction_ReplaceIt";
+                var jwtIssuer = config["Jwt:Issuer"] ?? config["ApplicationUrl"] ?? "https://localhost";
+                var signingKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtKey));
+
+                var token = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(
+                    issuer: jwtIssuer,
+                    audience: null,
+                    claims: claims,
+                    notBefore: DateTime.UtcNow,
+                    expires: DateTime.UtcNow.AddHours(8),
+                    signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(signingKey, Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256)
+                );
+
+                var tokenString = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler().WriteToken(token);
+
+                return Results.Ok(new { access_token = tokenString, expires_in = 8 * 3600 });
+            });
+
             app.MapControllers();
             //app.MapFallbackToFile("/wasm-stand-alone-with-identity/{*path:nonfile}", "wasm-stand-alone-with-identity/index.html");
             await app.RunAsync(args,

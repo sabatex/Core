@@ -294,6 +294,9 @@ public static class IdentityComponentsEndpointRouteBuilderExtensions
         manageGroup.MapGet("/roles",async ([FromServices] IIdentityAdapter adapter) => await adapter.GetAvailableRolesAsync());
 
         var apiGroup = endpoints.MapGroup("/api");
+        // Allow both JwtBearer and cookie authentication for API group
+        // Allow either JWT Bearer ("Bearer") or the Identity application cookie
+        apiGroup.RequireAuthorization(new Microsoft.AspNetCore.Authorization.AuthorizeAttribute { AuthenticationSchemes = "Bearer," + IdentityConstants.ApplicationScheme });
         // GET current user info
         apiGroup.MapGet($"/{nameof(ApplicationUserDto)}", async ([FromServices] IIdentityAdapter adapter) => await adapter.GetUserInfoAsync())
                 .RequireAuthorization();
@@ -423,7 +426,7 @@ public static class IdentityComponentsEndpointRouteBuilderExtensions
                 if (!(context.User?.Identity?.IsAuthenticated ?? false))
                 {
                     var returnUrl = Uri.EscapeDataString(context.Request.GetEncodedUrl());
-                    context.Response.Redirect($"/Account/Login?returnUrl={returnUrl}");
+                    context.Response.Redirect($"/sabatex-login?returnUrl={returnUrl}");
                     return; // Зупиняємо pipeline
                 }
             }
