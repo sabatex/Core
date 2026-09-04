@@ -18,3 +18,14 @@ public abstract class EntityBase<TKey>:IEntityBase<TKey>
     /// </summary>
     public TKey Id { get; set; } = default!;
 }
+
+/// <summary>
+/// Базовий абстрактний клас для версіонованих сутностей з ключем.
+/// </summary>
+public abstract class EntityBaseVersioned<TKey> : EntityBase<TKey>, IVersionedEntity
+{
+    /// <summary>
+    /// Gets or sets the version of the entity. This property is used for optimistic concurrency control.
+    /// </summary>
+    public DateTimeOffset DateStamp { get; set; }
+}
