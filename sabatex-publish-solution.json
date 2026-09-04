@@ -5,6 +5,10 @@
       "enabled": true
     },
     {
+      "path": "src/Sabatex.Models/Sabatex.Models.csproj",
+      "enabled": true
+    },
+    {
       "path": "src/Sabatex.ObjectExchange.Models/Sabatex.ObjectExchange.Models.csproj",
       "enabled": true
     },

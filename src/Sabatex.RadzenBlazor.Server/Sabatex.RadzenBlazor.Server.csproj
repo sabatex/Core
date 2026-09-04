@@ -11,7 +11,7 @@
     <PackageTags>#Blazor</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RepositoryUrl>https://github.com/sabatex/Sabatex.RadzenBlazor</RepositoryUrl>
+    <RepositoryUrl>https://github.com/sabatex/Core</RepositoryUrl>
   </PropertyGroup>
 
   <!-- WASM Library Dependency -->

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<Copyright>Sabatex</Copyright>
+	<Authors>Serhiy Lakas</Authors>
+	<Title>Base models</Title>
+	<Description>Base models for Sabatex</Description>
+	  <PackageTags>C#</PackageTags>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <RepositoryUrl>https://github.com/sabatex/Core</RepositoryUrl>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+
+  </PropertyGroup>
+
+	<ItemGroup>
+		<None Include="./README.md" Pack="true" PackagePath="\" />
+		<ProjectReference Include="..\Sabatex.Core\Sabatex.Core.csproj" Condition="'$(Configuration)' == 'Debug'" />
+		<PackageReference Include="Sabatex.Core" VersionOverride="$(Version)" Condition="'$(Configuration)' == 'Release'" />
+	</ItemGroup>
+
+	
+</Project>

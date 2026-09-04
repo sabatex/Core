@@ -21,8 +21,8 @@
 	<Company>sabatex on git</Company>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  
-	<PackageProjectUrl>https://github.com/sabatex/Extensions</PackageProjectUrl>
-	<RepositoryUrl>https://github.com/sabatex/Extensions</RepositoryUrl>
+	<PackageProjectUrl>https://github.com/sabatex/Core</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/sabatex/Core</RepositoryUrl>
   
   </PropertyGroup>
   
