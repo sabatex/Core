@@ -366,8 +366,7 @@ public static class IdentityComponentsEndpointRouteBuilderExtensions
     /// login path. Configure the options parameter to register one or more WebAssembly clients and specify their
     /// authorization requirements.</remarks>
     /// <param name="app">The application builder to configure the middleware for the current request pipeline.</param>
-    /// <param name="options">An optional delegate to configure Sabatex Blazor options, such as registering WebAssembly clients and specifying
-    /// authentication requirements. If null, default options are used.</param>
+    /// <param name="additionalAssemblies">An optional collection of additional assemblies to scan for WASM clients.</param>
     /// <returns>The application builder instance with the Sabatex Blazor middleware configured. This enables further chaining of
     /// middleware registrations.</returns>
     public static IApplicationBuilder UseSabatexServerBlazor(this IApplicationBuilder app, IEnumerable<Assembly> additionalAssemblies)
