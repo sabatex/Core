@@ -6,13 +6,13 @@
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
 @inject IIdentityAdapter DataAdapter
-<SabatexEditForm TItem="ApplicationUserDto" TKey="string" Item="Item" IsNew="@(Id == null)">
+<SabatexEditForm TItem="ApplicationUserDto" TKey="Guid" Item="Item" IsNew="@(Id == null)">
     <Content Context="item">
         <RadzenColumn Size="12" SizeMD="8" SizeLG="10">
             <RadzenFormField Text="Description" Style="width:100%">
                 <RadzenTextBox @bind-Value="item.FullName" Name="Description" class="w-100" ReadOnly="true" />
             </RadzenFormField>
-            <RadzenCheckBoxList @bind-Value=@Item.Roles TValue="string" class="mb-5" Change=@(args=>Item.Roles = args)>
+            <RadzenCheckBoxList @bind-Value=@Item.RolesCollection TValue="string" class="mb-5" Change=@(args=>Item.RolesCollection = args)>
                 <Items>
                     @{
                         foreach (var value in rolesCollection)

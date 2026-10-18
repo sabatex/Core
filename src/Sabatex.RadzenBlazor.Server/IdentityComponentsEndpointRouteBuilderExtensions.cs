@@ -313,9 +313,9 @@ public static class IdentityComponentsEndpointRouteBuilderExtensions
         {
             if (userInfo == null)
                 return Results.BadRequest();
-            if (string.IsNullOrEmpty(userInfo.Id))
-                userInfo.Id = id;
-            if (userInfo.Id != id)
+            if (userInfo.Id == Guid.Empty)
+                userInfo.Id = Guid.Parse(id);
+            if (userInfo.Id != Guid.Parse(id))
                 return Results.BadRequest("Id mismatch");
 
             await adapter.UpdateUserInfoAsync(userInfo);

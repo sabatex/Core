@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -416,7 +416,7 @@ public class IdentityAdapterServer : IIdentityAdapter
         var user =await  GetApplicationUserAsync();
         return new ApplicationUserDto
         {
-            Id = user.Id,
+            Id = Guid.Parse(user.Id),
             FullName = user.FullName,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber
@@ -438,7 +438,7 @@ public class IdentityAdapterServer : IIdentityAdapter
         var message = _localizer["Updating user info for user {0}", userInfo.Id];
         var user = await GetApplicationUserAsync();
         
-        if (user.Id != userInfo.Id)
+        if (Guid.Parse(user.Id) != userInfo.Id)
         {
             message = _localizer["Attempt to update user info for a different user. User ID: {0}, Attempted ID: {1}", user.Id, userInfo.Id];
             _logger.LogWarning(message);
@@ -524,22 +524,22 @@ public class IdentityAdapterServer : IIdentityAdapter
         {
             return new ApplicationUserDto
             {
-                Id = Id,
+                Id = Guid.Parse(Id),
                 FullName = string.Empty,
                 Email = string.Empty,
                 PhoneNumber = null,
-                Roles = Array.Empty<string>()
+                Roles = string.Empty
             };
         }
 
         var roles = await _userManager.GetRolesAsync(user);
         return new ApplicationUserDto
         {
-            Id = user.Id,
+            Id = Guid.Parse(user.Id),
             FullName = user.FullName ?? string.Empty,
             Email = user.Email ?? string.Empty,
             PhoneNumber = user.PhoneNumber,
-            Roles = roles
+            RolesCollection = roles
         };
     }
 }

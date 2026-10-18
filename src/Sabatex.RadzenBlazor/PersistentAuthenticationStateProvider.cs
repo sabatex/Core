@@ -28,7 +28,7 @@ public class PersistentAuthenticationStateProvider : AuthenticationStateProvider
             yield return new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString());
             yield return new Claim(CustomClaimTypes.FullName, userInfo.FullName);
             yield return new Claim(ClaimTypes.Email, userInfo.Email);
-            foreach (var role in userInfo.Roles)
+            foreach (var role in userInfo.RolesCollection)
             {
                 yield return new Claim(ClaimTypes.Role, role);
             }

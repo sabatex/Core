@@ -1,9 +1,9 @@
-﻿@page "/identity-user"
+@page "/identity-user"
 @using Sabatex.Core.Identity
 @inject IIdentityAdapter IdentityAdapter
 
 
-    <SabatexEditForm TItem="ApplicationUserDto" TKey="string" Item="user">
+    <SabatexEditForm TItem="ApplicationUserDto" TKey="Guid" Item="user">
         <Content Context="item">
             <RadzenColumn Size="12" SizeMD="8" SizeLG="6">
                 <RadzenFormField Text="Email" Style="width:100%">

@@ -1,0 +1,11 @@
+@using Sabatex.Core.Identity
+<SabatexRadzenGrid TItem="ApplicationUserDto" TKey="Guid" IsInserted="false">
+    <Columns>
+        <RadzenDataGridColumn TItem="ApplicationUserDto" Property="Name" Title="Name" />
+        <RadzenDataGridColumn TItem="ApplicationUserDto" Property="FullName" Title="Full Name" />
+        <RadzenDataGridColumn TItem="ApplicationUserDto" Property="Roles" Title="Roles" Width="120px" />
+    </Columns>
+</SabatexRadzenGrid>
+@code {
+
+}
